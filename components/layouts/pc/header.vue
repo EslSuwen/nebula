@@ -18,29 +18,17 @@
         </el-row>
       </el-col>
       <el-col :xs="10" :sm="6" :md="6" :xl="6" style="padding-top: 1rem;text-align: right;">
-        <el-autocomplete
-          v-model="queryString"
+
+        <el-input
+          :disabled="$router.currentRoute.path==='/search'"
+          placeholder="请输入关键词进行搜索"
+          prefix-icon="el-icon-search"
           size="small"
-          value-key="label"
-          :fetch-suggestions="querySearchAsync"
-          placeholder="搜索帖子、作品集和用户"
-          :trigger-on-focus="false"
-          @select="handleSelect"
-          style="width: 80%;"
-          popper-class="search-result-box"
-        >
-          <template slot-scope="{ item }">
-            <el-col>
-              <span class="search-result-type">
-                <small class="text-muted" v-html="getSearchResultType(item.type)"></small>
-              </span>
-              <span>{{ item.label }}</span>
-            </el-col>
-          </template>
-          <!--          <template slot="append">-->
-          <!--            <el-button size="small" icon="el-icon-search" @click="search"></el-button>-->
-          <!--          </template>-->
-        </el-autocomplete>
+          v-model="keywords"
+          @change="violetSearch">
+        </el-input>
+        <!--        <el-button icon="el-icon-search"-->
+        <!--                   @click="$router.push({path:'/search'})"></el-button>-->
       </el-col>
       <el-col :xs="6" :sm="6" :md="6" :xl="3" style="padding-top: 1rem;">
         <client-only>
@@ -150,7 +138,8 @@ export default {
       timeout: null,
       show: false,
       notifications: [],
-      notificationNumbers: ""
+      notificationNumbers: "",
+      keywords: ''
     };
   },
   watch: {
@@ -258,6 +247,9 @@ export default {
           break;
       }
       return type;
+    },
+    violetSearch() {
+      this.$router.push({path: '/search', query: {keywords: this.keywords}})
     }
   },
   mounted() {
