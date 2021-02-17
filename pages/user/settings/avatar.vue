@@ -155,12 +155,12 @@ export default {
       let _ts = this;
       _ts.$axios.$get('/api/user-info/detail/' + _ts.idUser).then(function (res) {
         if (res) {
-          if (res.message) {
+          if (!res.success) {
             _ts.$message.error(res.message);
           } else {
-            _ts.$set(_ts, 'user', res.user);
-            _ts.$set(_ts, 'avatarUrl', res.user.avatarUrl);
-            _ts.$refs.cropper.replace(res.user.avatarUrl);
+            _ts.$set(_ts, 'user', res.result.user);
+            _ts.$set(_ts, 'avatarUrl', res.result.user.avatarUrl);
+            _ts.$refs.cropper.replace(res.result.user.avatarUrl);
             // _ts.webImageToBase64(res.user.avatarUrl);
           }
         }

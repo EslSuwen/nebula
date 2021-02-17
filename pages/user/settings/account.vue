@@ -87,11 +87,11 @@
         let _ts = this;
         _ts.$axios.$get('/api/user-info/detail/' + _ts.idUser).then(function (res) {
           if (res) {
-            if (res.message) {
+            if (!res.success) {
               _ts.$message.error(res.message);
             } else {
-              _ts.$set(_ts, 'user', res.user);
-              _ts.$set(_ts, 'userExtend', res.userExtend);
+              _ts.$set(_ts, 'user', res.result.user);
+              _ts.$set(_ts, 'userExtend', res.result.userExtend);
             }
           }
         })
@@ -104,7 +104,7 @@
             nickname: _ts.user.nickname
           }
         }).then(function (res) {
-          if (res && res.message) {
+          if (res && !res.success) {
             _ts.$message.error(res.message);
           }
         })
@@ -120,11 +120,11 @@
           if (valid) {
             _ts.$axios.$patch('/api/user-info/update', user).then(function (res) {
               if (res) {
-                if (res.message) {
+                if (!res.success) {
                   _ts.$message.error(res.message);
                 } else {
-                  _ts.$set(_ts, 'user', res.user);
-                  _ts.$store.commit('setUserInfo', res.user);
+                  _ts.$set(_ts, 'user', res.result);
+                  _ts.$store.commit('setUserInfo', res.result);
                   _ts.$message.success('更新成功 !');
                 }
               }
@@ -142,7 +142,7 @@
             if (res.message) {
               _ts.$message.error(res.message);
             } else {
-              _ts.$set(_ts, 'userExtend', res.userExtend);
+              _ts.$set(_ts, 'userExtend', res.result);
               _ts.$message.success('更新成功 !');
             }
           }

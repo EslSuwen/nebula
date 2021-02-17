@@ -23,8 +23,12 @@
             <span slot="title">专题管理</span>
           </el-menu-item>
           <el-menu-item index="admin-userDic">
-            <i class="el-icon-s-custom"></i>
+            <i class="el-icon-notebook-2"></i>
             <span slot="title">字典管理</span>
+          </el-menu-item>
+          <el-menu-item index="admin-articles">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">文章管理</span>
           </el-menu-item>
           <el-menu-item index="admin-tags">
             <i class="el-icon-price-tag"></i>

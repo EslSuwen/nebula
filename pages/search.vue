@@ -1,13 +1,7 @@
 <template>
   <div>
-    <!--        <div class="box">-->
-    <!--          <div class="searchBox">-->
-    <!--            <input type="text" v-model="keyword" placeholder="请输入关键词进行搜索" class="searchInput" style="padding-left: 10px;">-->
-    <!--            <el-button @click="search" type="info">信息按钮</el-button>-->
-    <!--          </div>-->
-    <!--        </div>-->
     <div class="search-box"
-         :class="articles.articles.length===0?'search-box-nodata':'search-box-data'">
+         :class="!articles.records||articles.records.length===0?'search-box-nodata':'search-box-data'">
       <el-input
         placeholder="请输入内容"
         prefix-icon="el-icon-search"
@@ -17,7 +11,7 @@
     </div>
     <el-row class="wrapper">
       <el-col :xs="24" :sm="24" :xl="24" style="margin: 0 auto;">
-        <el-col v-for="article in articles.articles" :key="article.idArticle" style="padding-bottom: 1rem;">
+        <el-col v-for="article in articles.records" :key="article.idArticle" style="padding-bottom: 1rem;">
           <el-card>
             <div class="card-body d-flex flex-column">
               <el-link rel="nofollow" @click="onRouter('article',article.articleLink)" :underline="false"
@@ -65,11 +59,11 @@
         </el-col>
         <el-col>
           <div class="vertical-container text-center">
-            <el-pagination :hide-on-single-page="true" v-model="articles.pagination"
+            <el-pagination :hide-on-single-page="true"
                            layout="prev, pager, next"
-                           :page-size="articles.pagination.pageSize"
-                           :current-page="articles.pagination.currentPage"
-                           :total="articles.pagination.total"
+                           :page-size="articles.size"
+                           :current-page="articles.current"
+                           :total="articles.total"
                            prev-text="上一页"
                            next-text="下一页"
                            @current-change="currentChange">
@@ -90,7 +84,7 @@ export default {
   data() {
     return {
       keyword: undefined,
-      articles: {pagination: {pageSize: 0, currentPage: 0, total: 0}, articles: []},
+      articles: {pagination: {pageSize: 0, currentPage: 0, total: 0}, records: []},
     }
   },
   created() {
@@ -101,7 +95,7 @@ export default {
   },
   methods: {
     search($event, pageNum) {
-      this.articles = {pagination: {pageSize: 0, currentPage: 0, total: 0}, articles: []}
+      this.articles = {pagination: {pageSize: 0, currentPage: 0, total: 0}}
       if (!this.keyword || this.keyword.length === 0) {
         return
       }
@@ -110,12 +104,13 @@ export default {
       }
       this.$axios.$get(`/api/lucene/searchArticle/${this.keyword}?pageNum=${pageNum}`).then((res) => {
         if (res) {
-          this.articles = res
+          this.articles = res.result
         } else {
           this.$message.info('未找到相关文章！')
         }
       }).catch((err) => {
         console.log(err)
+        this.$message.error(err)
       })
     },
     currentChange(pageNum) {
@@ -144,13 +139,6 @@ export default {
 </script>
 
 <style>
-/*.box {*/
-/*  margin: 0 auto;*/
-/*  padding-top: 80px;*/
-/*  height: 50px;*/
-/*  width: 100%;*/
-/*}*/
-
 .search-box {
   transition: all 800ms;
 }
@@ -169,18 +157,4 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
-
-/*.searchInput {*/
-/*  display: inline-block;*/
-/*  width: 85%;*/
-/*  height: 38px;*/
-/*  border: 1px solid #cccccc;*/
-/*  float: left;*/
-/*  box-sizing: border-box;*/
-/*  -moz-box-sizing: border-box; !* Firefox *!*/
-/*  -webkit-box-sizing: border-box; !* Safari *!*/
-/*  border-bottom-left-radius: 5px;*/
-/*  border-top-left-radius: 5px;*/
-/*}*/
 </style>

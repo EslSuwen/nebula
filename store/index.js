@@ -76,7 +76,6 @@ export const actions = {
       // 内容数据
       store.dispatch('topic/fetchNavList'),
       store.dispatch('article/fetchList'),
-      store.dispatch('search/fetchList'),
     ]
 
     return Promise.all(initFetchAppData)

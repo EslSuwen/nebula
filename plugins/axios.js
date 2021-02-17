@@ -11,16 +11,16 @@ export default function ({app, $axios, store, redirect}) {
     }
   })
   $axios.onResponse(response => {
-    return new Promise((resolve, reject) => {
+    return Promise.resolve(response);
+    /*return new Promise((resolve, reject) => {
       //返回数据逻辑处理 比如：error_code错误处理
       let message;
-      if (typeof (response.data.data) !== 'undefined') {
-        message = response.data.data.message
-      } else if (typeof (response.data) !== 'undefined') {
+      if (typeof (response.data.success) !== 'undefined') {
         message = response.data.message
       }
       if (response.data.success) {
-        resolve(response.data);
+        console.log(response.data.result)
+        resolve(response.data.result);
       } else {
         if (response.data.code === '0') {
           Message.error(message ? message : '服务异常')
@@ -41,7 +41,7 @@ export default function ({app, $axios, store, redirect}) {
         }
       }
       reject(response);
-    })
+    })*/
   });
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status)

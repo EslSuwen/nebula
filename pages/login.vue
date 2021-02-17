@@ -94,21 +94,22 @@ export default {
           }
 
           _ts.$axios.$post('/api/console/login', data).then(function (res) {
+            console.log(res)
             _ts.$set(_ts, 'loginLoading', false);
             if (res) {
-              if (res.message) {
+              if (!res.success) {
                 _ts.$message(res.message);
                 return false;
               }
               let auth = {
-                accessToken: res.user.token,
-                idUser: res.user.idUser,
-                role: res.user.weights
+                accessToken: res.result.token,
+                idUser: res.result.idUser,
+                role: res.result.weights
               }
 
               let user = {
-                nickname: res.user.nickname,
-                avatarURL: res.user.avatarUrl
+                nickname: res.result.nickname,
+                avatarURL: res.result.avatarUrl
               }
               _ts.$store.commit('setAuth', auth) // mutating to store for client rendering
               localStorage.setItem('user', JSON.stringify(user))

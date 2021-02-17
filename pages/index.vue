@@ -35,7 +35,18 @@ export default {
           page: page
         }
       })
-    }
+    },
+    loadData(){
+      this.$axios.$get('/api/console/articles').then((res) => {
+        console.log(res)
+        if (res) {
+        } else {
+          this.$message.info('未找到相关文章！')
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
   },
   mounted() {
     this.$store.commit('setActiveMenu', 'index')

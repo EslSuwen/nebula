@@ -79,7 +79,7 @@ export const actions = {
       })
       .then(response => {
         commit('updateListFetching', false);
-        commit('updateListData', response);
+        commit('updateListData', response.result);
       })
       .catch(error => {
         console.log(error);
