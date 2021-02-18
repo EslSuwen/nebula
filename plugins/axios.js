@@ -1,4 +1,4 @@
-import {Message} from 'element-ui'
+import {Message} from "element-ui";
 
 const Cookie = process.client ? require('js-cookie') : undefined
 export default function ({app, $axios, store, redirect}) {
@@ -11,7 +11,12 @@ export default function ({app, $axios, store, redirect}) {
     }
   })
   $axios.onResponse(response => {
-    return Promise.resolve(response);
+    if (response.data.success) {
+      return Promise.resolve({data: response.data.result})
+    } else {
+      Message.error(response.data.message)
+      return Promise.reject(response);
+    }
     /*return new Promise((resolve, reject) => {
       //返回数据逻辑处理 比如：error_code错误处理
       let message;

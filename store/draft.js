@@ -33,7 +33,7 @@ export const mutations = {
     state.detail.fetching = action
   },
   updateDetailData(state, action) {
-    state.detail.data = action.article
+    state.detail.data = action
   }
 }
 
@@ -61,36 +61,15 @@ export const actions = {
       });
   },
   // 获取文章详情
-  fetchDetail({ commit }, params = {}) {
-    // const delay = fetchDelay(
-    //   isBrowser
-    // )
-    // if (isBrowser) {
-    //   Vue.nextTick(() => {
-    //     window.scrollTo(0, 300);
-    //   })
-    // }
+  async fetchDetail({commit}, params = {}) {
     commit('updateDetailFetching', true)
-    // commit('updateDetailData', {})
-    return this.$axios
+    let data = await this.$axios
       .$get(`${DRAFT_API_PATH}/detail/${params.draft_id}`, {
         params: {
           type: 3
         }
       })
-      .then(response => {
-        return new Promise(resolve => {
-          commit('updateDetailData', response)
-          commit('updateDetailFetching', false)
-          resolve(response)
-          // delay(() => {
-          //   resolve(response)
-          // })
-        })
-      })
-      .catch(error => {
-        commit('updateDetailFetching', false)
-        return Promise.reject(error)
-      })
+    commit('updateDetailData', data)
+    commit('updateDetailFetching', false)
   }
 }

@@ -94,7 +94,7 @@ export default {
     }
   },
   methods: {
-    search($event, pageNum) {
+    async search($event, pageNum) {
       this.articles = {pagination: {pageSize: 0, currentPage: 0, total: 0}}
       if (!this.keyword || this.keyword.length === 0) {
         return
@@ -102,16 +102,7 @@ export default {
       if (!pageNum) {
         pageNum = 1
       }
-      this.$axios.$get(`/api/lucene/searchArticle/${this.keyword}?pageNum=${pageNum}`).then((res) => {
-        if (res) {
-          this.articles = res.result
-        } else {
-          this.$message.info('未找到相关文章！')
-        }
-      }).catch((err) => {
-        console.log(err)
-        this.$message.error(err)
-      })
+      this.articles = await this.$axios.$get(`/api/lucene/searchArticle/${this.keyword}?pageNum=${pageNum}`)
     },
     currentChange(pageNum) {
       this.search(null, pageNum)

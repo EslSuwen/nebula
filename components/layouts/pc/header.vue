@@ -224,9 +224,9 @@ export default {
       let _ts = this;
       if (_ts.user) {
         _ts.$axios.$get('/api/notification/unread').then(function (res) {
-          if (res) {
-            _ts.$set(_ts, 'notifications', res.notifications);
-            _ts.$set(_ts, 'notificationNumbers', res.notifications.length == 0 ? "" : res.notifications.length);
+          if (res.success) {
+            _ts.$set(_ts, 'notifications', res.records);
+            _ts.$set(_ts, 'notificationNumbers', res.total === 0 ? "" : res.notifications.total);
           }
         })
       }

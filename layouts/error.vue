@@ -17,7 +17,7 @@
 
 <script>
   export default {
-    name: 'Error',
+    errerrname: 'Error',
     layout: 'empty',
     props: {
       error: Object

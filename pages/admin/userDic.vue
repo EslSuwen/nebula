@@ -3,7 +3,7 @@
     <el-col style="margin-bottom: 1rem;">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>字典管理</el-breadcrumb-item>
+        <el-breadcrumb-item>词典管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-col>
     <el-col>
@@ -17,7 +17,7 @@
           prop="id">
         </el-table-column>
         <el-table-column
-          label="字典"
+          label="词典"
           width="300"
           prop="dic">
         </el-table-column>
@@ -77,11 +77,7 @@ export default {
           pageSize: this.userPage.size
         }
       }).then((res) => {
-        if (res.success) {
-          this.userPage = res.result
-        } else {
-          this.$message.info('未找到数据！')
-        }
+        this.userPage = res
       }).catch((err) => {
         console.log(err)
       })

@@ -40,7 +40,7 @@ export const mutations = {
     state.detail.fetching = action
   },
   updateDetailData(state, action) {
-    state.detail.data = action.article
+    state.detail.data = action
   },
   clearDetailData(state, action) {
     state.detail.data = {}
@@ -64,60 +64,33 @@ export const mutations = {
 
 export const actions = {
   // 获取文章列表
-  fetchList({commit}, params = {}) {
+  async fetchList({commit}, params = {}) {
     // 清空已有数据
     commit('updateListData', getDefaultListData())
     commit('updateListFetching', true)
-    let data = {
+    let parameter = {
       page: params.page || 1,
       topicUri: params.topic_uri || ''
     }
+    let data = await this.$axios.$get(`${BASE_API_PATH}/articles`,
+      {
+        params: parameter
+      })
+    commit('updateListFetching', false);
+    commit('updateListData', data);
 
-    return this.$axios
-      .$get(`${BASE_API_PATH}/articles`, {
-        params: data
-      })
-      .then(response => {
-        commit('updateListFetching', false);
-        commit('updateListData', response.result);
-      })
-      .catch(error => {
-        console.log(error);
-        commit('updateListFetching', false);
-      });
   },
   // 获取文章详情
-  fetchDetail({ commit }, params = {}) {
-    // const delay = fetchDelay(
-    //   isBrowser
-    // )
-    // if (isBrowser) {
-    //   Vue.nextTick(() => {
-    //     window.scrollTo(0, 300);
-    //   })
-    // }
+  async fetchDetail({commit}, params = {}) {
     commit('updateDetailFetching', true)
-    // commit('updateDetailData', {})
-    return this.$axios
-      .$get(`${BASE_API_PATH}/article/${params.article_id}`)
-      .then(response => {
-        return new Promise(resolve => {
-          commit('updateDetailData', response)
-          commit('updateDetailFetching', false)
-          resolve(response)
-          // delay(() => {
-          //   resolve(response)
-          // })
-        })
-      })
-      .catch(error => {
-        commit('updateDetailFetching', false)
-        return Promise.reject(error)
-      })
+    let data = await this.$axios.$get(`${BASE_API_PATH}/article/${params.article_id}`)
+    console.log(data)
+    commit('updateDetailData', data)
+    commit('updateDetailFetching', false)
   },
 
   // 获取文章详情
-  fetchPostDetail({ commit }, params = {}) {
+  fetchPostDetail({commit}, params = {}) {
     // const delay = fetchDelay(
     //   isBrowser
     // )
@@ -150,10 +123,10 @@ export const actions = {
         return Promise.reject(error)
       })
   },
-  updateThumbsUpCount({ commit }, params = {}) {
+  updateThumbsUpCount({commit}, params = {}) {
     commit('updateArticleThumbsUpCount', params)
   },
-  updateSponsorCount({ commit }, params = {}) {
+  updateSponsorCount({commit}, params = {}) {
     commit('updateArticleSponsorCount', params)
   }
 }

@@ -24,7 +24,7 @@
           </el-menu-item>
           <el-menu-item index="admin-userDic">
             <i class="el-icon-notebook-2"></i>
-            <span slot="title">字典管理</span>
+            <span slot="title">词典管理</span>
           </el-menu-item>
           <el-menu-item index="admin-articles">
             <i class="el-icon-tickets"></i>
