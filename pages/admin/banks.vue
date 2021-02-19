@@ -8,7 +8,7 @@
     </el-col>
     <el-col>
       <el-table
-        :data="banks"
+        :data="bankPage.records"
         style="width: 100%">
         <el-table-column
           label="#"
@@ -52,11 +52,11 @@
         :hide-on-single-page="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="pagination.currentPage"
+        :current-page="bankPage.current"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pagination.pageSize"
+        :page-size="bankPage.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pagination.total">
+        :total="bankPage.total">
       </el-pagination>
     </el-col>
     <el-col>
@@ -96,8 +96,7 @@ export default {
   },
   computed: {
     ...mapState({
-      banks: state => state.bank.list.data.banks,
-      pagination: state => state.bank.list.data.pagination
+      bankPage: state => state.bank.list.data,
     })
   },
   data() {

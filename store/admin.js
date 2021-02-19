@@ -2,15 +2,13 @@ export const ADMIN_API_PATH = '/api/admin'
 
 const getDefaultUsersData = () => {
   return {
-    users: [],
-    pagination: {}
+    userPage: {},
   }
 }
 
 const getDefaultRolesData = () => {
   return {
-    role: [],
-    pagination: {}
+    rolePage: {},
   }
 }
 
@@ -27,60 +25,44 @@ export const mutations = {
     state.fetching = action
   },
   updateUsersData(state, action) {
-    state.user.users = action.users
-    state.user.pagination = action.pagination
+    state.user.userPage = action
   },
   updateRolesData(state, action) {
-    state.role.roles = action.roles
-    state.role.pagination = action.pagination
+    state.role.rolePage = action
   }
 }
 
 export const actions = {
-  fetchUsers({commit}, params = {}) {
+  async fetchUsers({commit}, params = {}) {
     // 清空已有数据
     commit('updateUsersData', getDefaultUsersData())
     commit('updateFetching', true)
 
-    let data = {
+    let parameters = {
       page: params.page || 1,
       rows: params.rows || 10
     }
 
-    return this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/users`, {
-        params: data
+        params: parameters
       })
-      .then(response => {
-        commit('updateFetching', false);
-        commit('updateUsersData', response);
-      })
-      .catch(error => {
-        console.log(error);
-        commit('updateFetching', false);
-      });
+    commit('updateFetching', false);
+    commit('updateUsersData', data);
   },
-  fetchRoles({commit}, params = {}) {
+  async fetchRoles({commit}, params = {}) {
     // 清空已有数据
     commit('updateRolesData', getDefaultRolesData())
     commit('updateFetching', true)
-
-    let data = {
+    let parameters = {
       page: params.page || 1,
       rows: params.rows || 10
     }
-
-    return this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/roles`, {
-        params: data
+        params: parameters
       })
-      .then(response => {
-        commit('updateFetching', false);
-        commit('updateRolesData', response);
-      })
-      .catch(error => {
-        console.log(error);
-        commit('updateFetching', false);
-      });
+    commit('updateFetching', false);
+    commit('updateRolesData', data);
   }
 }

@@ -2,8 +2,7 @@ export const BANK_API_PATH = '/api/admin/bank'
 
 const getDefaultListData = () => {
   return {
-    banks: [],
-    pagination: {}
+    bankPage: {},
   }
 }
 
@@ -26,26 +25,19 @@ export const mutations = {
 }
 
 export const actions = {
-  fetchList({commit}, params = {}) {
+  async fetchList({commit}, params = {}) {
     // 清空已有数据
     commit('updateListData', getDefaultListData())
     commit('updateListFetching', true)
-    let data = {
+    let parameters = {
       page: params.page || 1
     }
-
-    return this.$axios
+    let data = await this.$axios
       .$get(`${BANK_API_PATH}/list`, {
-        params: data
+        params: parameters
       })
-      .then(response => {
-        commit('updateListFetching', false);
-        commit('updateListData', response);
-      })
-      .catch(error => {
-        console.log(error);
-        commit('updateListFetching', false);
-      });
+    commit('updateListData', data);
+    commit('updateListFetching', false);
   }
 }
 

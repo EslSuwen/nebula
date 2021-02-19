@@ -8,7 +8,7 @@
     </el-col>
     <el-col>
       <el-table
-        :data="users"
+        :data="userPage.records"
         style="width: 100%">
         <el-table-column
           label="#"
@@ -76,11 +76,11 @@
         :hide-on-single-page="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="pagination.currentPage"
+        :current-page="userPage.current"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pagination.pageSize"
+        :page-size="userPage.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pagination.total">
+        :total="userPage.total">
       </el-pagination>
     </el-col>
     <el-col>
@@ -88,7 +88,7 @@
         <el-form>
           <el-form-item>
             <el-radio-group v-model="idRole">
-              <el-radio v-for="role in roles" :key="role.idRole" border :label="role.idRole">{{ role.name }}</el-radio>
+              <el-radio v-for="role in rolePage.records" :key="role.idRole" border :label="role.idRole">{{ role.name }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -116,9 +116,8 @@ export default {
   },
   computed: {
     ...mapState({
-      users: state => state.admin.user.users,
-      pagination: state => state.admin.user.pagination,
-      roles: state => state.admin.role.roles
+      userPage: state => state.admin.user.userPage,
+      rolePage: state => state.admin.role.rolePage
     })
   },
   data() {

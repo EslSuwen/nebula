@@ -10,7 +10,7 @@
       <el-button size="small" @click="createTag" plain>创建标签</el-button>
       <el-button size="small" @click="cleanUnusedTag" plain>清除未使用标签</el-button>
     </el-col>
-    <el-col v-for="tag in tags" :key="tag.idTag">
+    <el-col v-for="tag in tagPage.records" :key="tag.idTag">
       <el-card style="margin: .5rem;">
         <el-col :span="1">
           <el-avatar shape="square" :src="tag.tagIconPath" fit="scale-down"></el-avatar>
@@ -32,10 +32,10 @@
     </el-col>
     <el-col>
       <div class="vertical-container text-center">
-        <el-pagination :hide-on-single-page="true" v-model="pagination"
+        <el-pagination :hide-on-single-page="true"
                        layout="prev, pager, next"
-                       :current-page="pagination.currentPage"
-                       :total="pagination.total"
+                       :current-page="tagPage.current"
+                       :total="tagPage.total"
                        @current-change="currentChange">
         </el-pagination>
       </div>
@@ -44,70 +44,69 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+import {mapState} from 'vuex';
 
-  export default {
-    name: "tags",
-    fetch({store, params, error}) {
-      return Promise.all([
-        store
-          .dispatch('tag/fetchList', params)
-          .catch(err => error({statusCode: 404}))
-      ])
+export default {
+  name: "tags",
+  fetch({store, params, error}) {
+    return Promise.all([
+      store
+        .dispatch('tag/fetchList', params)
+        .catch(err => error({statusCode: 404}))
+    ])
+  },
+  computed: {
+    ...mapState({
+      tagPage: state => state.tag.list.data,
+    })
+  },
+  methods: {
+    cleanUnusedTag() {
+      let _ts = this;
+      _ts.$confirm('确定清除未使用标签吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        _ts.$axios.$delete('/api/admin/tag/clean-unused').then(function (res) {
+          if (res && res.message) {
+            _ts.$message.error(res.message);
+          } else {
+            const p = _ts.pagination.currentPage;
+            _ts.currentChange(p);
+            _ts.$message({
+              type: 'success',
+              message: '已清理完成!'
+            });
+          }
+        })
+      }).catch(() => {
+        _ts.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
     },
-    computed: {
-      ...mapState({
-        tags: state => state.tag.list.data.tags,
-        pagination: state => state.tag.list.data.pagination
+    currentChange(page) {
+      this.$store.dispatch('tag/fetchList', {
+        page: page
       })
     },
-    methods: {
-      cleanUnusedTag() {
-        let _ts = this;
-        _ts.$confirm('确定清除未使用标签吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          _ts.$axios.$delete('/api/admin/tag/clean-unused').then(function (res) {
-            if (res && res.message){
-              _ts.$message.error(res.message);
-            } else {
-              const p = _ts.pagination.currentPage;
-              _ts.currentChange(p);
-              _ts.$message({
-                type: 'success',
-                message: '已清理完成!'
-              });
-            }
-          })
-        }).catch(() => {
-          _ts.$message({
-            type: 'info',
-            message: '已取消'
-          });
-        });
-      },
-      currentChange(page){
-        this.$store.dispatch('tag/fetchList', {
-          page: page
-        })
-      },
-      createTag() {
-        this.$router.push({
-          path: '/admin/tag/post/'
-        })
-      },
-      updateTag(id) {
-        this.$router.push({
-          path: '/admin/tag/post/' + id
-        })
-      }
+    createTag() {
+      this.$router.push({
+        path: '/admin/tag/post/'
+      })
     },
-    mounted() {
-      this.$store.commit("setActiveMenu", "admin-tags");
+    updateTag(id) {
+      this.$router.push({
+        path: '/admin/tag/post/' + id
+      })
     }
+  },
+  mounted() {
+    this.$store.commit("setActiveMenu", "admin-tags");
   }
+}
 </script>
 
 <style scoped>

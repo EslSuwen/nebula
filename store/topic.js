@@ -9,14 +9,12 @@ export const ADMIN_API_PATH = '/api/admin'
 
 const getDefaultListData = () => {
   return {
-    topics: [],
-    pagination: {}
+    topicPage: {},
   }
 }
 const getDefaultTagsData = () => {
   return {
-    tags: [],
-    pagination: {}
+    tagPage: {},
   }
 }
 
@@ -67,75 +65,48 @@ export const mutations = {
 }
 
 export const actions = {
-  fetchList({commit}, params = {}) {
+  async fetchList({commit}, params = {}) {
     // 清空已有数据
     commit('updateListData', getDefaultListData())
     commit('updateListFetching', true)
-    let data = {
+    let parameters = {
       page: params.page || 1
     }
-
-    return this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/topics`, {
-        params: data
+        params: parameters
       })
-      .then(response => {
-        commit('updateListFetching', false);
-        commit('updateListData', response);
-      })
-      .catch(error => {
-        console.log(error);
-        commit('updateListFetching', false);
-      });
+    commit('updateListFetching', false);
+    commit('updateListData', data);
   },
-  fetchNavList({ commit }, params) {
+  async fetchNavList({commit}, params) {
     commit('updateFetching', true);
-    return this.$axios
+    let data = await this.$axios
       .$get(`${TOPIC_API_PATH}/topic-nav`)
-      .then(response => {
-        commit('updateNavData', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+    commit('updateNavData', data)
+    commit('updateFetching', false)
   },
-  fetchDetail({ commit }, params) {
+  async fetchDetail({commit}, params) {
     commit('updateDetailFetching', true);
-    return this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/topic/${params.topic_uri}`)
-      .then(response => {
-        commit('updateDetailData', response)
-        commit('updateDetailFetching', false)
-      })
-      .catch(error => {
-        commit('updateDetailFetching', false)
-      })
+    commit('updateDetailData', data)
+    commit('updateDetailFetching', false)
   },
-  fetchTopicTags({ commit }, params) {
+  async fetchTopicTags({commit}, params) {
     commit('updateTopicTagsFetching', true);
-    return this.$axios
+    let data = this.$axios
       .$get(`${ADMIN_API_PATH}/topic/${params.topic_uri}/tags?page=${params.page}`)
-      .then(response => {
-        commit('updateTopicTagsData', response)
-        commit('updateTopicTagsFetching', false)
-      })
-      .catch(error => {
-        commit('updateTopicTagsFetching', false)
-      })
+    commit('updateTopicTagsData', data)
+    commit('updateTopicTagsFetching', false)
   },
-  fetchUnBindTags({ commit }, params) {
+  async fetchUnBindTags({commit}, params) {
     commit('updateTopicTagsFetching', true);
-    return this.$axios
+    let data = this.$axios
       .$get(`${ADMIN_API_PATH}/topic/unbind-topic-tags`, {
         params: params
       })
-      .then(response => {
-        commit('updateTopicTagsData', response)
-        commit('updateTopicTagsFetching', false)
-      })
-      .catch(error => {
-        commit('updateTopicTagsFetching', false)
-      })
+    commit('updateTopicTagsData', data)
+    commit('updateTopicTagsFetching', false)
   }
 }

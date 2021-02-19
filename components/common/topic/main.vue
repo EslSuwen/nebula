@@ -4,7 +4,7 @@
       <el-menu type="border-card" :default-active="currentTopic" style="margin-top: -2px;border: 0;" mode="horizontal"
                @select="handleSelectTopic">
         <el-menu-item index="news">最新</el-menu-item>
-        <el-menu-item v-for="topic in topicNavs" :key="topic.idTopic" :index="topic.topicUri">{{topic.topicTitle}}
+        <el-menu-item v-for="topic in topicPage.records" :key="topic.idTopic" :index="topic.topicUri">{{topic.topicTitle}}
         </el-menu-item>
       </el-menu>
     </el-col>
@@ -24,7 +24,7 @@
     },
     computed: {
       ...mapState({
-        topicNavs: state => state.topic.data,
+        topicPage: state => state.topic.list.data,
         isFetching: state => state.topic.fetching
       })
     },

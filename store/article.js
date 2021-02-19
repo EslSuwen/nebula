@@ -5,8 +5,7 @@ export const BASE_API_PATH = '/api/console'
 
 const getDefaultListData = () => {
   return {
-    articles: [],
-    pagination: {}
+    articles: {},
   }
 }
 
@@ -64,7 +63,7 @@ export const mutations = {
 
 export const actions = {
   // 获取文章列表
-  async fetchList({commit}, params = {}) {
+  fetchList({commit}, params = {}) {
     // 清空已有数据
     commit('updateListData', getDefaultListData())
     commit('updateListFetching', true)
@@ -72,13 +71,12 @@ export const actions = {
       page: params.page || 1,
       topicUri: params.topic_uri || ''
     }
-    let data = await this.$axios.$get(`${BASE_API_PATH}/articles`,
+    this.$axios.$get(`${BASE_API_PATH}/articles`,
       {
         params: parameter
       })
-    commit('updateListFetching', false);
-    commit('updateListData', data);
-
+      .then(data => commit('updateListData', data))
+      .finally(commit('updateListFetching', false))
   },
   // 获取文章详情
   async fetchDetail({commit}, params = {}) {

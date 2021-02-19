@@ -9,7 +9,7 @@
     <el-col>
       <el-button type="primary" @click="showAddDialog" plain>添加角色</el-button>
       <el-table
-        :data="roles"
+        :data="rolePage.records"
         style="width: 100%;margin-top: 1rem;">
         <el-table-column
           label="#"
@@ -57,11 +57,11 @@
         :hide-on-single-page="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="pagination.currentPage"
+        :current-page="rolePage.current"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pagination.pageSize"
+        :page-size="rolePage.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pagination.total">
+        :total="rolePage.total">
       </el-pagination>
     </el-col>
     <el-col>
@@ -100,8 +100,7 @@
     },
     computed: {
       ...mapState({
-        pagination: state => state.admin.role.pagination,
-        roles: state => state.admin.role.roles
+        rolePage: state => state.admin.role.rolePage
       })
     },
     data() {

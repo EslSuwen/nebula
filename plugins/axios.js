@@ -14,7 +14,6 @@ export default function ({app, $axios, store, redirect}) {
     if (response.data.success) {
       return Promise.resolve({data: response.data.result})
     } else {
-      Message.error(response.data.message)
       return Promise.reject(response);
     }
     /*return new Promise((resolve, reject) => {
@@ -53,6 +52,7 @@ export default function ({app, $axios, store, redirect}) {
     if (code === 400) {
       redirect('/400');
     } else {
+      Message.error(error.data.message)
       console.log(error.data);
     }
   })

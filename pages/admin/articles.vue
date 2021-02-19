@@ -99,7 +99,7 @@ export default {
     }
   },
   created() {
-    this.articlePage.current = this.$route.query.page || 1
+    this.articlePage.current = Number(this.$route.query.page) || 1
     this.loadData()
   },
   methods: {

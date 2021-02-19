@@ -1,5 +1,3 @@
-import {ARTICLE_API_PATH} from "@/store/article";
-
 /**
  * @file 分类数据状态 / ES module
  * @module store/category
@@ -11,8 +9,7 @@ export const TAG_API_PATH = '/api/tag'
 
 const getDefaultListData = () => {
   return {
-    tags: [],
-    pagination: {}
+    tagPage: {},
   }
 }
 const getDefaultData = () => {
@@ -61,68 +58,33 @@ export const actions = {
     // 清空已有数据
     commit('updateListData', getDefaultListData())
     commit('updateListFetching', true)
-    let data = {
+    let parameters = {
       page: params.page || 1
     }
-
-    return this.$axios
+    this.$axios
       .$get(`${ADMIN_API_PATH}/tags`, {
-        params: data
-      })
-      .then(response => {
-        commit('updateListFetching', false);
-        commit('updateListData', response);
-      })
-      .catch(error => {
-        console.log(error);
-        commit('updateListFetching', false);
-      });
+        params: parameters
+      }).then(data => commit('updateListData', data))
+      .finally(commit('updateListFetching', false))
   },
-  fetchDetail({ commit }, params) {
+  async fetchDetail({commit}, params) {
     commit('updateFetching', true);
-    return this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/tag/${params.tag_id}`)
-      .then(response => {
-        commit('updateDetailData', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+    commit('updateDetailData', data)
+    commit('updateFetching', false)
   },
 
   // 获取文章详情
-  fetchPostDetail({ commit }, params = {}) {
-    // const delay = fetchDelay(
-    //   isBrowser
-    // )
-    // if (isBrowser) {
-    //   Vue.nextTick(() => {
-    //     window.scrollTo(0, 300);
-    //   })
-    // }
-
+  async fetchPostDetail({commit}, params = {}) {
     if (typeof params.tag_id === 'undefined') {
       commit('updateDetailData', getDefaultData())
       return;
     }
     commit('updateDetailFetching', true)
-    // commit('updateDetailData', {})
-    return this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/tag/detail/${params.tag_id}`)
-      .then(response => {
-        return new Promise(resolve => {
-          commit('updateDetailData', response)
-          commit('updateDetailFetching', false)
-          resolve(response)
-          // delay(() => {
-          //   resolve(response)
-          // })
-        })
-      })
-      .catch(error => {
-        commit('updateDetailFetching', false)
-        return Promise.reject(error)
-      })
+    commit('updateDetailData', data)
+    commit('updateDetailFetching', false)
   }
 }
