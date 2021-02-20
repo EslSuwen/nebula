@@ -63,10 +63,18 @@ export const mutations = {
 
 export const actions = {
   // 获取文章列表
-  fetchList({commit}, params = {}) {
+  fetchList({commit, state}, params = {}) {
+    commit('updateListFetching', true)
+    // 当前页判断
+    let currentData = JSON.parse(JSON.stringify(state)).list.data
+    console.log(Number(params.page) === currentData.current
+    )
+    if (Number(params.page) === currentData.current) {
+      commit('updateListFetching', false)
+      return
+    }
     // 清空已有数据
     commit('updateListData', getDefaultListData())
-    commit('updateListFetching', true)
     let parameter = {
       page: params.page || 1,
       topicUri: params.topic_uri || ''
@@ -79,12 +87,17 @@ export const actions = {
       .finally(commit('updateListFetching', false))
   },
   // 获取文章详情
-  async fetchDetail({commit}, params = {}) {
+  fetchDetail({commit, state}, params = {}) {
     commit('updateDetailFetching', true)
-    let data = await this.$axios.$get(`${BASE_API_PATH}/article/${params.article_id}`)
-    console.log(data)
-    commit('updateDetailData', data)
-    commit('updateDetailFetching', false)
+    // 当前文章判断
+    let currentData = JSON.parse(JSON.stringify(state)).detail.data
+    if (Number(params.article_id) === currentData.idArticle) {
+      commit('updateDetailFetching', false)
+      return
+    }
+    this.$axios.$get(`${BASE_API_PATH}/article/${params.article_id}`)
+      .then(data => commit('updateDetailData', data))
+      .finally(commit('updateDetailFetching', false))
   },
 
   // 获取文章详情
