@@ -27,6 +27,9 @@ export default {
       articles: state => state.article.list.data
     })
   },
+  created() {
+    this.$store.dispatch('article/fetchList', {page: this.$route.query.page || 1})
+  },
   methods: {
     currentChangeArticle(page) {
       this.$router.push({

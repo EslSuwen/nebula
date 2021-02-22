@@ -97,19 +97,14 @@ export default {
             console.log(res)
             _ts.$set(_ts, 'loginLoading', false);
             if (res) {
-              if (!res.success) {
-                _ts.$message(res.message);
-                return false;
-              }
               let auth = {
-                accessToken: res.result.token,
-                idUser: res.result.idUser,
-                role: res.result.weights
+                accessToken: res.token,
+                idUser: res.idUser,
+                role: res.weights
               }
-
               let user = {
-                nickname: res.result.nickname,
-                avatarURL: res.result.avatarUrl
+                nickname: res.nickname,
+                avatarURL: res.avatarUrl
               }
               _ts.$store.commit('setAuth', auth) // mutating to store for client rendering
               localStorage.setItem('user', JSON.stringify(user))
