@@ -84,7 +84,7 @@
     },
     head() {
       return {
-        title: this.portfolio.portfolioTitle || 'RYMCU - 嵌入式知识学习交流平台',
+        title: this.portfolio.portfolioTitle || 'RYMCU -知识学习交流平台',
         meta: [
           {
             name: 'keywords',

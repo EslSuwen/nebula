@@ -179,7 +179,7 @@ export default {
   },
   head() {
     return {
-      title: this.article.articleTitle || 'RYMCU - 嵌入式知识学习交流平台',
+      title: this.article.articleTitle || 'RYMCU - 知识学习交流平台',
       meta: [
         {
           name: 'keywords',

@@ -7,7 +7,8 @@ const apisMap = {
     CDN: '',
     PROXY: '/proxy',
     SOCKET: 'http://localhost:3000',
-    GRAVATAR: '/proxy/static.rymcu.com/avatar'
+    GRAVATAR: '/proxy/static.rymcu.com/avatar',
+    domianURL: 'http://localhost:8099/forest'
   },
   production: {
     FE: 'https://rymcu.com',

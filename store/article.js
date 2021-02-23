@@ -67,8 +67,6 @@ export const actions = {
     commit('updateListFetching', true)
     // 当前页判断
     let currentData = JSON.parse(JSON.stringify(state)).list.data
-    console.log(Number(params.page) === currentData.current
-    )
     if (Number(params.page) === currentData.current) {
       commit('updateListFetching', false)
       return

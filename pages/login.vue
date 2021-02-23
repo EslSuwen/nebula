@@ -16,6 +16,9 @@
         </el-form-item>
         <el-form-item>
           <el-button style="width: 60%;" type="primary" @click="login" :loading="loginLoading" plain>立即登录</el-button>
+          <el-button style="width: 60%;" type="primary" @click="onThirdLogin('gitlab')" :loading="loginLoading" plain>
+            gitlab
+          </el-button>
           <el-button style="width: 32%;" @click="register" plain>注册</el-button>
         </el-form-item>
       </el-form>
@@ -23,9 +26,7 @@
     <el-col :xs="24" :sm="12" :xl="12" class="intro vditor-reset verify__sign">
       <div>
         <h2>欢迎来到 RYMCU</h2>
-        <p><a rel="nofollow" href="/">RYMCU</a> 是一个嵌入式知识共享平台，专注于单片机学习。</p>
-        <p>我们正在构建一个小众社区。大家在这里相互<strong>信任</strong>，以<em>平等 • 自由 • 奔放</em>的价值观进行分享交流。最终，希望大家能够找到与自己志同道合的伙伴，共同成长。</p>
-        <p>最后请大家共同爱护这个<i>自由</i>的交流环境，相信这里一定是你注册过的所有社区中用户体验最好的 😍</p>
+        <p><a rel="nofollow" href="/">RYMCU</a> 是一个知识共享平台。</p>
       </div>
     </el-col>
     <el-dialog
@@ -53,6 +54,7 @@
 
 <script>
 import {mapState} from 'vuex';
+import apiConfig from "@/config/api.config";
 
 const Cookie = process.client ? require('js-cookie') : undefined
 export default {
@@ -156,11 +158,49 @@ export default {
           _ts.$message(res.message)
         }
       })
-    }
+    },
+    thirdLoginCallBack(params) {
+      console.log(params)
+      if (!params || !params.token) {
+        return
+      }
+      this.doThirdLogin(params)
+    },
+    //第三方登录
+    onThirdLogin(source) {
+      window.location.href = apiConfig.domianURL + `/api/v1/thirdLogin/render/${source}`
+    },
+    // 根据token执行登录
+    doThirdLogin(data) {
+      let _ts = this;
+      console.log(data)
+      let auth = {
+        accessToken: data.token,
+        idUser: data.idUser,
+        role: data.weights
+      }
+      let user = {
+        // FIXME nickname 无法正常获取
+        nickname: data.nickname,
+        avatarURL: data.avatarUrl
+      }
+      _ts.$store.commit('setAuth', auth) // mutating to store for client rendering
+      localStorage.setItem('user', JSON.stringify(user))
+      _ts.$store.commit('setUser', user) // mutating to store for client rendering
+      Cookie.set('auth', auth)
+      if (_ts.historyUrl) {
+        window.location.href = _ts.historyUrl
+      } else {
+        _ts.$router.push({
+          name: 'index'
+        })
+      }
+    },
   },
   mounted() {
     this.$store.commit('setActiveMenu', 'login');
     this.$set(this, 'historyUrl', this.$route.query.historyUrl || '');
+    this.thirdLoginCallBack(this.$route.query)
   }
 }
 </script>

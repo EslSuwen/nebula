@@ -8,11 +8,6 @@
       </el-col>
       <el-col :span="12" style="text-align: left;">
         <el-link class="footer-link" rel="nofollow" :underline="false" :href="markdownGuide" style="vertical-align: baseline;"><span>Markdown 教程</span></el-link>
-        <el-link class="footer-link" rel="nofollow" :underline="false" :href="rules" style="vertical-align: baseline;"><span>社区规章</span></el-link>
-        <el-link class="footer-link" rel="nofollow" :underline="false" :href="currencyRule" style="vertical-align: baseline;"><span>货币规则</span></el-link>
-        <el-link class="footer-link" rel="nofollow" :underline="false" :href="email" style="vertical-align: baseline;"><span>意见反馈</span></el-link>
-        <el-link class="footer-link" rel="nofollow" :underline="false" :href="aboutMe" style="vertical-align: baseline;"><span>关于我们</span></el-link>
-        <el-link class="footer-link" rel="nofollow" :underline="false" :href="github" style="vertical-align: baseline;"><span>github</span></el-link>
       </el-col>
       <el-col :span="12" style="text-align: right;">
         <el-col>
@@ -20,9 +15,6 @@
             <el-col class="col-auto">
               Copyright © 2020
               <el-link rel="nofollow" :underline="false" href="/" style="vertical-align: baseline;"><span>{{ systemName }}</span>
-              </el-link>
-              .
-              <el-link rel="nofollow" :underline="false" href="http://www.beian.miit.gov.cn/" style="vertical-align: baseline;"><span>{{ beiAn }}</span>
               </el-link>
             </el-col>
           </el-col>
@@ -39,15 +31,9 @@
       return {
         systemTitle: '\u7f57\u5409\u7f51\u0020\u002d\u0020\u5185\u5bb9\u5206\u4eab\u751f\u6001\u5e73\u53f0',
         systemName: 'RYMCU',
-        systemUrl: 'https://rymcu.com',
-        slogan: 'RYMCU · 嵌入式知识学习交流平台 ',
-        beiAn: '沪ICP备19042611号',
+        systemUrl: '/',
+        slogan: 'RYMCU · 知识学习交流平台 ',
         markdownGuide: '/guides/markdown',
-        rules: '/article/20',
-        email: 'mailto:support@rymcu.com',
-        aboutMe: '/article/115',
-        github: 'https://github.com/rymcu',
-        currencyRule: '/rules/currency'
       }
     }
   }
