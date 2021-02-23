@@ -93,7 +93,7 @@ export const actions = {
       commit('updateDetailFetching', false)
       return
     }
-    this.$axios.$get(`${BASE_API_PATH}/article/${params.article_id}`)
+    return this.$axios.$get(`${BASE_API_PATH}/article/${params.article_id}`)
       .then(data => commit('updateDetailData', data))
       .finally(commit('updateDetailFetching', false))
   },
