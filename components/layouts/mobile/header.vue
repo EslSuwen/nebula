@@ -59,9 +59,6 @@
             <nuxt-link to="/login">
               <el-link rel="nofollow" :underline="false" style="margin-left: 10px;">登录</el-link>
             </nuxt-link>
-            <nuxt-link to="/register">
-              <el-link rel="nofollow" :underline="false" style="margin-left: 10px;">注册</el-link>
-            </nuxt-link>
           </el-col>
         </client-only>
       </el-col>

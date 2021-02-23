@@ -18,7 +18,6 @@
         </el-row>
       </el-col>
       <el-col :xs="10" :sm="6" :md="6" :xl="6" style="padding-top: 1rem;text-align: right;">
-
         <el-input
           :disabled="$router.currentRoute.path==='/search'"
           placeholder="请输入关键词进行搜索"
@@ -27,8 +26,6 @@
           v-model="keywords"
           @change="violetSearch">
         </el-input>
-        <!--        <el-button icon="el-icon-search"-->
-        <!--                   @click="$router.push({path:'/search'})"></el-button>-->
       </el-col>
       <el-col :xs="6" :sm="6" :md="6" :xl="3" style="padding-top: 1rem;">
         <client-only>
@@ -67,9 +64,7 @@
                     </el-link>
                   </el-dropdown-item>
                   <el-dropdown-item command="user">个人中心</el-dropdown-item>
-                  <el-dropdown-item command="answer">每日一题</el-dropdown-item>
                   <el-dropdown-item command="drafts" divided>我的草稿</el-dropdown-item>
-                  <el-dropdown-item command="wallet">我的钱包</el-dropdown-item>
                   <el-dropdown-item command="user-info" divided>设置</el-dropdown-item>
                   <el-dropdown-item v-if="hasPermissions" command="admin-dashboard">系统管理</el-dropdown-item>
                   <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
@@ -80,9 +75,6 @@
           <el-col v-else style="text-align: right;">
             <nuxt-link to="/login">
               <el-link rel="nofollow" :underline="false" style="margin-left: 10px;">登录</el-link>
-            </nuxt-link>
-            <nuxt-link to="/register">
-              <el-link rel="nofollow" :underline="false" style="margin-left: 10px;">注册</el-link>
             </nuxt-link>
           </el-col>
         </client-only>
