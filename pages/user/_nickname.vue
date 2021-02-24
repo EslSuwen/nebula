@@ -135,10 +135,10 @@ export default {
     ...mapState({
       user: state => state.user.data,
       userExtend: state => state.user.userExtend,
-      articles: state => state.user.articles,
-      portfolios: state => state.user.portfolios,
-      followers: state => state.user.followers,
-      followings: state => state.user.followings,
+      articles: state => state.user.articlePage,
+      portfolios: state => state.user.portfolioPage,
+      followers: state => state.user.followerPage,
+      followings: state => state.user.followingPage,
       oauth: state => state.oauth
     })
   },

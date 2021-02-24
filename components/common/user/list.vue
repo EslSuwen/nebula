@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <el-row>
-      <el-col :span="12" v-for="user in users.users" :key="user.idUser" style="margin-bottom: 1rem;">
+      <el-col :span="12" v-for="user in users.records" :key="user.idUser" style="margin-bottom: 1rem;">
         <el-col :span="3">
           <el-avatar size="medium" :src="user.avatarUrl"></el-avatar>
         </el-col>
@@ -14,15 +14,15 @@
           </div>
         </el-col>
       </el-col>
-      <el-col v-show="!users" class="text-center">
+      <el-col v-show="users.records.length===0" class="text-center">
         这里什么都没有!
       </el-col>
       <el-col>
         <div class="vertical-container text-center">
-          <el-pagination :hide-on-single-page="true" v-model="users.pagination"
+          <el-pagination :hide-on-single-page="true"
                          layout="prev, pager, next"
-                         :current-page="users.pagination.currentPage"
-                         :total="users.pagination.total"
+                         :current-page="users.current"
+                         :total="users.total"
                          @current-change="currentChange">
           </el-pagination>
         </div>
@@ -32,8 +32,11 @@
 </template>
 
 <script>
+import Error from "@/layouts/error";
+
 export default {
   name: "UserList",
+  components: {Error},
   props: {
     users: Object
   },

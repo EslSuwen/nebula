@@ -9,24 +9,12 @@ export const USER_API_PATH = '/api/user'
 export const state = () => {
   return {
     fetching: false,
-    data: [],
+    data: {},
     userExtend: {},
-    articles: {
-      articles: [],
-      pagination: {}
-    },
-    portfolios:  {
-      portfolios: [],
-      pagination: {}
-    },
-    followers:  {
-      users: [],
-      pagination: {}
-    },
-    followings:  {
-      users: [],
-      pagination: {}
-    }
+    articlePage: {},
+    portfolioPage: {},
+    followerPage: {},
+    followingPage: {}
   }
 }
 
@@ -41,43 +29,33 @@ export const mutations = {
     state.userExtend = action
   },
   updateArticleList(state, action) {
-    state.articles = action
+    state.articlePage = action
   },
   updatePortfolioList(state, action) {
-    state.portfolios = action
+    state.portfolioPage = action
   },
   updateFollowerList(state, action) {
-    state.followers = action
+    state.followerPage = action
   },
   updateFollowingList(state, action) {
-    state.followings = action
+    state.followingPage = action
   }
 }
 
 export const actions = {
-  fetchDetail({ commit }, params) {
+  fetchDetail({commit}, params) {
     commit('updateFetching', true);
     return this.$axios
       .$get(`${USER_API_PATH}/${params.nickname}`)
-      .then(response => {
-        commit('updateDetailData', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+      .then(data => commit('updateDetailData', data))
+      .finally(commit('updateFetching', false))
   },
-  fetchUserExtend({ commit }, params) {
+  fetchUserExtend({commit}, params) {
     commit('updateFetching', true);
     return this.$axios
       .$get(`${USER_API_PATH}/${params.nickname}/user-extend`)
-      .then(response => {
-        commit('updateUserExtendData', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+      .then(data => commit('updateUserExtendData', data))
+      .finally(commit('updateFetching', false))
   },
   fetchArticleList({commit}, params) {
     commit('updateFetching', true);
@@ -87,13 +65,8 @@ export const actions = {
           page: params.page
         }
       })
-      .then(response => {
-        commit('updateArticleList', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+      .then(data => commit('updateArticleList', data))
+      .finally(commit('updateFetching', false))
   },
   fetchPortfolioList({commit}, params) {
     commit('updateFetching', true);
@@ -103,52 +76,31 @@ export const actions = {
           page: params.page
         }
       })
-      .then(response => {
-        commit('updatePortfolioList', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+      .then(data => commit('updatePortfolioList', data))
+      .finally(commit('updateFetching', false))
   },
   fetchFollowerList({commit}, params) {
     commit('updateFetching', true);
-    commit('updateFollowerList', {
-      users: [],
-      pagination: {}
-    })
+    commit('updateFollowerList', {})
     return this.$axios
       .$get(`${USER_API_PATH}/${params.nickname}/followers`, {
         params: {
           page: params.page
         }
       })
-      .then(response => {
-        commit('updateFollowerList', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+      .then(data => commit('updateFollowerList', data))
+      .finally(commit('updateFetching', false))
   },
   fetchFollowingList({commit}, params) {
     commit('updateFetching', true);
-    commit('updateFollowingList', {
-      users: [],
-      pagination: {}
-    })
+    commit('updateFollowingList', {})
     return this.$axios
       .$get(`${USER_API_PATH}/${params.nickname}/followings`, {
         params: {
           page: params.page
         }
       })
-      .then(response => {
-        commit('updateFollowingList', response)
-        commit('updateFetching', false)
-      })
-      .catch(error => {
-        commit('updateFetching', false)
-      })
+      .then(data => commit('updateFollowingList', data))
+      .finally(commit('updateFetching', false))
   }
 }

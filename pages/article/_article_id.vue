@@ -80,31 +80,12 @@
                   {{ article.articleThumbsUpCount }}
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="赞赏" placement="top-start">
-                <el-button v-if="user.idUser === article.articleAuthorId" type="text" icon="el-icon-coffee" style="font-size: 1.2rem;">
-                  {{ article.articleSponsorCount }}
-                </el-button>
-                <el-popconfirm
-                  v-else
-                  title="赞赏本文作者 20 巴旦木？"
-                  @confirm="sponsor"
-                >
-                  <el-button slot="reference" type="text" icon="el-icon-coffee" style="font-size: 1.2rem;">
-                    {{ article.articleSponsorCount }}
-                  </el-button>
-                </el-popconfirm>
-              </el-tooltip>
             </el-col>
             <el-col v-else>
               <el-tooltip class="item" effect="dark" content="点赞" placement="top-start">
                 <el-button type="text" style="font-size: 1.2rem;">
                   <font-awesome-icon :icon="['far', 'thumbs-up']"></font-awesome-icon>
                   {{ article.articleThumbsUpCount }}
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="赞赏" placement="top-start">
-                <el-button type="text" icon="el-icon-coffee" style="font-size: 1.2rem;">
-                  {{ article.articleSponsorCount }}
                 </el-button>
               </el-tooltip>
             </el-col>
@@ -333,34 +314,17 @@ export default {
     thumbsUp() {
       let _ts = this;
       _ts.$axios.$post('/api/article/thumbs-up', {
-        idArticle: _ts.article.idArticle
-      }).then(function (res) {
-        if (res) {
-          if (res.success) {
-            _ts.$message.success(res.message);
-            _ts.$store.dispatch('article/updateThumbsUpCount', {thumbsUpNumber: res.thumbsUpNumber})
+        idArticle: _ts.article.idArticle,
+      }).then((res) => {
+          if (res === 1) {
+            _ts.$message.info('点赞成功')
           } else {
-            _ts.$message.error(_ts.message);
+            _ts.$message.info('取消点赞')
           }
+          _ts.$store.dispatch('article/updateThumbsUpCount', {thumbsUpNumber: res})
         }
-      })
+      )
     },
-    sponsor() {
-      let _ts = this;
-      _ts.$axios.$post('/api/article/sponsor', {
-        dataType: '0',
-        dataId: _ts.article.idArticle
-      }).then(function (res) {
-        if (res) {
-          if (res.success) {
-            _ts.$message.success(res.message);
-            _ts.$store.dispatch('article/updateSponsorCount', {sponsorNumber: 1})
-          } else {
-            _ts.$message.error(_ts.message);
-          }
-        }
-      })
-    }
   },
   mounted() {
     let _ts = this;

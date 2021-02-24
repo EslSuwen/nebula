@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <el-row class="row-cards row-deck" :gutter="10">
-      <el-col v-for="portfolio in portfolios.portfolios" :key="portfolio.idPortfolio">
+      <el-col v-for="portfolio in portfolios.records" :key="portfolio.idPortfolio">
         <el-col class="card">
           <el-col class="card-body d-flex flex-column">
             <el-col :span="24" class="mr-3">
@@ -28,15 +28,15 @@
           </el-col>
         </el-col>
       </el-col>
-      <el-col v-show="!portfolios" class="text-center">
+      <el-col v-show="portfolios.records.length===0" class="text-center">
         这里什么都没有!
       </el-col>
       <el-col>
         <div class="vertical-container text-center">
-          <el-pagination :hide-on-single-page="true" v-model="portfolios.pagination"
+          <el-pagination :hide-on-single-page="true"
                          layout="prev, pager, next"
-                         :current-page="portfolios.pagination.currentPage"
-                         :total="portfolios.pagination.total"
+                         :current-page="portfolios.current"
+                         :total="portfolios.total"
                          @current-change="currentChange">
           </el-pagination>
         </div>
