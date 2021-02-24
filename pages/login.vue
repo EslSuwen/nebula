@@ -8,7 +8,7 @@
         <el-form-item style="text-align: center;margin-top: 4rem">
           <el-button type="primary"
                      style="width: 100%"
-                     @click="onThirdLogin('gitlab')"
+                     @click="onThirdLogin"
                      :loading="loginLoading" plain>
             <img alt="GitLab" src="@/assets/gitlab.svg" width="20">
             <span>&nbspGitLab&nbsp登录</span>
@@ -126,8 +126,8 @@ export default {
       this.doThirdLogin(params)
     },
     //第三方登录
-    onThirdLogin(source) {
-      window.location.href = apiConfig.domianURL + `/api/v1/thirdLogin/render/${source}`
+    onThirdLogin() {
+      window.location.href = '/api/thirdLogin/render/gitlab'
     },
     // 根据token执行登录
     doThirdLogin(data) {
