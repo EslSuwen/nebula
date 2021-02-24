@@ -7,18 +7,12 @@
 export const COMMENT_API_PATH = '/api/article/'
 export const LIKE_COMMENT_API_PATH = '/like/comment'
 
-const getDefaultListData = () => {
-  return {
-    data: [],
-    pagination: {}
-  }
-}
 
 export const state = () => {
   return {
     fetching: false,
     posting: false,
-    data: getDefaultListData()
+    commentPage: {}
   }
 }
 
@@ -28,17 +22,11 @@ export const mutations = {
     state.fetching = action
   },
   updateListData(state, action) {
-    state.data =  {
-      data: action.comments,
-      pagination: {
-        page: 1
-      }
-    }
+    state.commentPage = action
   },
   clearListData(state) {
-    state.data = getDefaultListData()
+    state.commentPage = {}
   },
-
   // 发布评论
   updatePostFetching(state, action) {
     state.posting = action
@@ -59,38 +47,17 @@ export const mutations = {
 }
 
 export const actions = {
-  fetchList({ commit, rootState }, params = {}) {
-    // const { SortType } = rootState.global.constants
-
-    // 修正参数
-    // params = Object.assign(
-    //   {
-    //     page: 1,
-    //     per_page: 88
-    //   },
-    //   params
-    // )
-
-    // const isRestart = params.page === 1
-    // const isDescSort = params.sort === SortType.Desc
-
-    // 清空数据
-    // isRestart && commit('updateListData', getDefaultListData())
-    commit('updateListData', getDefaultListData())
+  fetchList({commit, rootState}, params = {}) {
+    commit('updateListData', {})
     commit('updateListFetching', true)
-
     return this.$axios
       .$get(COMMENT_API_PATH + `${params.post_id}/comments`)
-      .then(response => {
-        // isDescSort && response.result.data.reverse()
-        commit('updateListData', response)
-        commit('updateListFetching', false)
-      })
-      .catch(error => commit('updateListFetching', false))
+      .then(data => commit('updateListData', data))
+      .finally(commit('updateListFetching', false))
   },
 
   // 发布评论
-  fetchPostComment({ commit }, comment) {
+  fetchPostComment({commit}, comment) {
     commit('updatePostFetching', true)
     return this.$axios
       .$post(COMMENT_API_PATH, comment)
@@ -106,9 +73,9 @@ export const actions = {
   },
 
   // 喜欢评论
-  fetchLikeComment({ commit }, comment) {
+  fetchLikeComment({commit}, comment) {
     return this.$axios
-      .$patch(LIKE_COMMENT_API_PATH, { comment_id: comment.id })
+      .$patch(LIKE_COMMENT_API_PATH, {comment_id: comment.id})
       .then(response => {
         commit('updateLikesIncrement', comment)
         return Promise.resolve(response)
