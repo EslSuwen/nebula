@@ -66,18 +66,14 @@
         :total="articlePage.total">
       </el-pagination>
     </el-col>
-    <el-col>
-      <article-list-modal ref="articleModal" @confirmEdit="updateEdit"></article-list-modal>
-    </el-col>
   </el-row>
 </template>
 
 <script>
-import ArticleListModal from "~/components/modal/articleListModal";
 
 export default {
   name: "articleList",
-  components: {ArticleListModal},
+  components: {},
   watch: {
     '$route.query': function () {
       this.articlePage.current = Number(this.$route.query.page) || 1
@@ -112,14 +108,10 @@ export default {
       })
     },
     handleEdit(index, article) {
-      if (article.articleStatus !== "0") {
-        this.$message.warning('删除或草稿状态的文章不允许修改！')
-        return
-      }
-      this.$refs.articleModal.edit(article)
+      this.$router.push({path: `/article/post/${article.idArticle}`,})
     },
     handleDetail(index, article) {
-      this.$refs.articleModal.detail(article)
+      this.$router.push({path: `/article/${article.idArticle}`,})
     },
     async updateEdit(formData) {
       await this.$axios.put(this.url.edit, formData)
