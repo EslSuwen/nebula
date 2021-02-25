@@ -1,19 +1,16 @@
 <template>
   <div>
-    <pc-main-view v-if="!isMobile"/>
-    <mobile-main-view v-else/>
+    <pc-main-view/>
   </div>
 </template>
 <script>
 import Vue from 'vue';
 import PcMainView from '~/components/layouts/pc/main.vue';
-import MobileMainView from '~/components/layouts/mobile/main.vue';
 
 export default Vue.extend({
   name: 'App',
   components: {
     PcMainView,
-    MobileMainView
   },
   computed: {
     theme() {

@@ -13,6 +13,7 @@
                      @select="handleSelectMenu">
               <el-menu-item index="index">首页</el-menu-item>
               <el-menu-item index="topic">专题</el-menu-item>
+              <el-menu-item index="search">搜索</el-menu-item>
             </el-menu>
           </el-col>
         </el-row>
@@ -161,6 +162,11 @@ export default {
       let activeMenu = _ts.$store.state.activeMenu;
       if (activeMenu !== item) {
         switch (item) {
+          case 'search':
+            _ts.$router.push({
+              path: '/search'
+            })
+            break;
           case 'topic':
             _ts.$router.push({
               path: '/topic/news?page=1'
