@@ -125,6 +125,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.commit('setActiveMenu', 'search')
   }
 }
 </script>

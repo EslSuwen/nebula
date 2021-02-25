@@ -161,6 +161,7 @@ export default {
       let _ts = this;
       let activeMenu = _ts.$store.state.activeMenu;
       if (activeMenu !== item) {
+        console.log(item)
         switch (item) {
           case 'search':
             _ts.$router.push({
@@ -171,10 +172,6 @@ export default {
             _ts.$router.push({
               path: '/topic/news?page=1'
             })
-            break;
-          case 'github':
-            window.open("https://github.com/rymcu");
-            return false;
             break;
           default:
             _ts.$router.push(
