@@ -141,27 +141,10 @@ export default {
     }
   },
   methods: {
-    querySearchAsync(queryString, cb) {
-      let initialSearchData = this.initialSearchData;
-      let results = queryString ? initialSearchData.filter(this.createStateFilter(queryString)) : initialSearchData;
-
-      clearTimeout(this.timeout);
-      this.timeout = setTimeout(() => {
-        cb(results);
-      }, 3000 * Math.random());
-    },
-    createStateFilter(queryString) {
-      return (state) => {
-        if (state && state.label) {
-          return (state.label.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
-        }
-      };
-    },
     handleSelectMenu(item) {
       let _ts = this;
       let activeMenu = _ts.$store.state.activeMenu;
       if (activeMenu !== item) {
-        console.log(item)
         switch (item) {
           case 'search':
             _ts.$router.push({
@@ -180,15 +163,6 @@ export default {
               }
             )
         }
-      }
-    },
-    handleSelect(item) {
-      console.log(item);
-      let _ts = this;
-      if (item) {
-        _ts.$router.push({
-          path: `/${item.type}/${item.value}`
-        })
       }
     },
     handleCommand(item) {
@@ -218,31 +192,15 @@ export default {
     getUnreadNotifications() {
       let _ts = this;
       if (_ts.user) {
-        _ts.$axios.$get('/api/notification/unread').then(function (res) {
-          if (res.success) {
-            _ts.$set(_ts, 'notifications', res.records);
-            _ts.$set(_ts, 'notificationNumbers', res.total === 0 ? "" : res.notifications.total);
-          }
+        _ts.$axios.$get('/api/notification/unread').then((res) => {
+          _ts.$set(_ts, 'notifications', res.records);
+          _ts.$set(_ts, 'notificationNumbers', res.total === 0 ? "" : res.total);
         })
       }
     },
-    search() {
-      console.log(this.queryString)
-    },
-    getSearchResultType(type) {
-      switch (type) {
-        case 'article':
-          type = '文章';
-          break;
-        case 'portfolio':
-          type = '作品集';
-          break;
-        case 'user':
-          type = '用户';
-          break;
-      }
-      return type;
-    },
+    /**
+     * @author @VioletFreesia
+     */
     violetSearch() {
       this.$router.push({path: '/search', query: {keywords: this.keywords}})
     }

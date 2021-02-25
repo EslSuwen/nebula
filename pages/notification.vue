@@ -26,7 +26,7 @@
     },
     computed: {
       ...mapState({
-        notifications: state => state.notification.list.data,
+        notifications: state => state.notification.list.noticePage,
         user: state => state.oauth
       })
     },

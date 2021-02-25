@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <el-row>
-      <el-col v-for="notification in notifications.notifications" :key="notification.idNotification">
+      <el-col v-for="notification in notifications.records" :key="notification.idNotification">
         <el-col v-if="notification.dataType == 0">
           <el-col :xs="16" :sm="20" :xl="20">
             <el-link rel="nofollow" :underline="false" @click="onRouter(notification)" style="font-size: 1.1em;"
@@ -55,10 +55,10 @@
       </el-col>
       <el-col>
         <div class="vertical-container text-center">
-          <el-pagination :hide-on-single-page="true" v-model="notifications.pagination"
+          <el-pagination :hide-on-single-page="true"
                          layout="prev, pager, next"
-                         :current-page="notifications.pagination.currentPage"
-                         :total="notifications.pagination.total"
+                         :current-page="notifications.current"
+                         :total="notifications.total"
                          @current-change="currentChange">
           </el-pagination>
         </div>

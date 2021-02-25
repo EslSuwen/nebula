@@ -1,17 +1,11 @@
 export const NOTIFICATION_API_PATH = '/api/notification'
 
-const getDefaultListData = () => {
-  return {
-    notifications: [],
-    pagination: {}
-  }
-}
 
 export const state = () => {
   return {
     list: {
       fetching: false,
-      data: getDefaultListData()
+      noticePage: {}
     }
   }
 }
@@ -22,7 +16,7 @@ export const mutations = {
     state.list.fetching = action
   },
   updateListData(state, action) {
-    state.list.data = action
+    state.list.noticePage = action
   }
 }
 
@@ -30,7 +24,7 @@ export const actions = {
   // 获取消息列表
   fetchList({commit}, params = {}) {
     // 清空已有数据
-    commit('updateListData', getDefaultListData())
+    commit('updateListData', {})
     commit('updateListFetching', true)
     let data = {
       page: params.page || 1
