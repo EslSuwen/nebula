@@ -223,13 +223,10 @@ export default {
       }).then(() => {
         let id = _ts.$route.params.article_id;
         _ts.$axios.$delete('/api/article/delete/' + id).then(function (res) {
-          if (res && res.message) {
-            _ts.$message(res.message);
-            return false;
-          }
           localStorage.removeItem('article-title');
           localStorage.removeItem('article-tags');
           _ts.contentEditor.setValue('');
+          _ts.$store.dispatch('article/fetchList', {force: true})
           _ts.$router.push({
             name: 'index'
           })

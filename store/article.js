@@ -65,11 +65,13 @@ export const actions = {
   // 获取文章列表
   fetchList({commit, state}, params = {}) {
     commit('updateListFetching', true)
-    // 当前页判断
-    let currentData = JSON.parse(JSON.stringify(state)).list.data
-    if (Number(params.page) === currentData.current) {
-      commit('updateListFetching', false)
-      return
+    if (!params.force) {
+      // 当前页判断
+      let currentData = JSON.parse(JSON.stringify(state)).list.data
+      if (Number(params.page) === currentData.current) {
+        commit('updateListFetching', false)
+        return
+      }
     }
     // 清空已有数据
     commit('updateListData', getDefaultListData())
