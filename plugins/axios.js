@@ -14,9 +14,6 @@ export default function ({app, $axios, store, redirect}) {
     if (response.data.success) {
       return Promise.resolve({data: response.data.result})
     } else {
-      return Promise.reject(response);
-    }
-    /*return new Promise((resolve, reject) => {
       //返回数据逻辑处理 比如：error_code错误处理
       let message;
       if (typeof (response.data.success) !== 'undefined') {
@@ -44,8 +41,8 @@ export default function ({app, $axios, store, redirect}) {
           Message.error(response.data.message);
         }
       }
-      reject(response);
-    })*/
+      return Promise.reject(response);
+    }
   });
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status)
