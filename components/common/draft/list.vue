@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col v-for="article in articles.articles" :key="article.idArticle">
+    <el-col v-for="article in articles.records" :key="article.idArticle">
       <el-col>
         <el-link rel="nofollow" @click="onRouter(article.articleLink)" :underline="false">
           <h2 v-html="article.articleTitle"></h2>
@@ -13,15 +13,15 @@
         <el-divider></el-divider>
       </el-col>
     </el-col>
-    <el-col v-if="articles.articles.length == 0" class="text-center">
+    <el-col v-if="articles.records.length === 0" class="text-center">
       <span class="text-default">这里什么也没有!</span>
     </el-col>
     <el-col>
       <div class="vertical-container text-center">
-        <el-pagination :hide-on-single-page="true" v-model="articles.pagination"
+        <el-pagination :hide-on-single-page="true"
                        layout="prev, pager, next"
-                       :current-page="articles.pagination.currentPage"
-                       :total="articles.pagination.total"
+                       :current-page="articles.current"
+                       :total="articles.total"
                        @current-change="currentChange">
         </el-pagination>
       </div>
@@ -30,23 +30,24 @@
 </template>
 
 <script>
-  export default {
-    name: "DraftList",
-    props: {
-      articles: {
-        type: Object
-      }
+export default {
+  name: "DraftList",
+  props: {
+    articles: {
+      type: Object
+    }
+  },
+  methods: {
+    currentChange(page) {
     },
-    methods: {
-      currentChange(page) {
-      },
-      onRouter(url) {
-        this.$router.push({
-          path: url
-        })
-      }
+    onRouter(url) {
+      console.log(url)
+      this.$router.push({
+        path: url
+      })
     }
   }
+}
 </script>
 
 <style scoped>

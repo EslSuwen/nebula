@@ -1,17 +1,11 @@
 export const DRAFT_API_PATH = '/api/article'
 
-const getDefaultListData = () => {
-  return {
-    articles: [],
-    pagination: {}
-  }
-}
 
 export const state = () => {
   return {
     list: {
       fetching: false,
-      data: getDefaultListData()
+      articlePage: {}
     },
     detail: {
       fetching: false,
@@ -26,7 +20,7 @@ export const mutations = {
     state.list.fetching = action
   },
   updateListData(state, action) {
-    state.list.data = action
+    state.list.articlePage = action
   },
   // 文章详情
   updateDetailFetching(state, action) {
@@ -41,7 +35,7 @@ export const actions = {
   // 获取消息列表
   fetchList({commit}, params = {}) {
     // 清空已有数据
-    commit('updateListData', getDefaultListData())
+    commit('updateListData', {})
     commit('updateListFetching', true)
     let data = {
       page: params.page || 1
@@ -54,6 +48,7 @@ export const actions = {
       .then(response => {
         commit('updateListFetching', false);
         commit('updateListData', response);
+        console.log(response)
       })
       .catch(error => {
         console.log(error);

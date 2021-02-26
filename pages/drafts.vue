@@ -25,7 +25,7 @@
     },
     computed: {
       ...mapState({
-        articles: state => state.draft.list.data,
+        articles: state => state.draft.list.articlePage,
         user: state => state.oauth
       })
     },
