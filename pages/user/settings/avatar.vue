@@ -153,17 +153,10 @@ export default {
     },
     getData() {
       let _ts = this;
-      _ts.$axios.$get('/api/user-info/detail/' + _ts.idUser).then(function (res) {
-        if (res) {
-          if (!res.success) {
-            _ts.$message.error(res.message);
-          } else {
-            _ts.$set(_ts, 'user', res.result.user);
-            _ts.$set(_ts, 'avatarUrl', res.result.user.avatarUrl);
-            _ts.$refs.cropper.replace(res.result.user.avatarUrl);
-            // _ts.webImageToBase64(res.user.avatarUrl);
-          }
-        }
+      _ts.$axios.$get('/api/user-info/detail/' + _ts.idUser).then((res) => {
+        _ts.$set(_ts, 'user', res.user);
+        _ts.$set(_ts, 'avatarUrl', res.user.avatarUrl);
+        _ts.$refs.cropper.replace(res.user.avatarUrl);
       })
     },
     reset() {
@@ -186,23 +179,20 @@ export default {
     updateUser(user) {
       let _ts = this;
       _ts.$refs['user'].validate((valid) => {
-        if (valid) {
-          _ts.$axios.$patch('/api/user-info/update', user).then(function (res) {
-            if (res) {
-              if (res.message) {
-                _ts.$message.error(res.message);
-              } else {
+          if (valid) {
+            _ts.$axios.$patch('/api/user-info/update', user).then((res) => {
                 _ts.$set(_ts, 'user', res.user);
                 _ts.$set(_ts, 'avatarUrl', res.user.avatarUrl);
                 _ts.$store.commit('setUserInfo', res.user);
                 _ts.$message.success('更新成功 !');
               }
-            }
-          })
-        } else {
-          _ts.$message.error('数据异常 !');
+            )
+          } else {
+            _ts.$message.error('数据异常 !');
+          }
         }
-      });
+      )
+      ;
     },
     fileToBase64(file) {
       let _ts = this;
@@ -212,7 +202,8 @@ export default {
         _ts.$set(_ts, 'avatarUrl', this.result);
         _ts.$refs.cropper.replace(this.result);
       }
-    },
+    }
+    ,
     compress(img, width, height, ratio) {
       // img可以是dataURL或者图片url
       /*	如果宽度大于 750 图片太大 等比压缩 	*/
@@ -233,7 +224,8 @@ export default {
       img64 = canvas.toDataURL("image/jpeg", ratio);
 
       return img64; // 压缩后的base64串
-    },
+    }
+    ,
     webImageToBase64(url) {
       let _ts = this;
       let c = document.createElement("canvas");

@@ -6,6 +6,9 @@
       </el-col>
       <el-col>
         <el-form :model="user" :rules="rules" ref="user" label-width="100px">
+          <el-form-item label="账号" prop="account">
+            <el-input :value="user.account" disabled></el-input>
+          </el-form-item>
           <el-form-item label="昵称" prop="nickname">
             <el-input v-model="user.nickname" @blur="checkNickname"></el-input>
           </el-form-item>
@@ -56,104 +59,89 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+import {mapState} from 'vuex';
 
-  export default {
-    name: "account",
-    computed: {
-      ...mapState({
-        idUser: state => state.oauth.idUser
+export default {
+  name: "account",
+  computed: {
+    ...mapState({
+      idUser: state => state.oauth.idUser
+    })
+  },
+  data() {
+    return {
+      user: {},
+      userExtend: {},
+      rules: {
+        nickname: [
+          {required: true, message: '请输入昵称', trigger: 'blur'},
+          {min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur'}
+        ],
+        email: [
+          {required: true, message: '请输入邮箱地址', trigger: 'blur'},
+          {type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}
+        ]
+      },
+      loading: false
+    }
+  },
+  methods: {
+    getData() {
+      let _ts = this;
+      _ts.$axios.$get('/api/user-info/detail/' + _ts.idUser).then((res) => {
+        _ts.$set(_ts, 'user', res.user);
+        _ts.$set(_ts, 'userExtend', res.userExtend);
       })
     },
-    data() {
-      return {
-        user: {},
-        userExtend: {},
-        rules: {
-          nickname: [
-            {required: true, message: '请输入昵称', trigger: 'blur'},
-            {min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur'}
-          ],
-          email: [
-            {required: true, message: '请输入邮箱地址', trigger: 'blur'},
-            {type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}
-          ]
-        },
-        loading: false
-      }
-    },
-    methods: {
-      getData() {
-        let _ts = this;
-        _ts.$axios.$get('/api/user-info/detail/' + _ts.idUser).then(function (res) {
-          if (res) {
-            if (!res.success) {
-              _ts.$message.error(res.message);
-            } else {
-              _ts.$set(_ts, 'user', res.result.user);
-              _ts.$set(_ts, 'userExtend', res.result.userExtend);
-            }
-          }
-        })
-      },
-      checkNickname() {
-        let _ts = this;
-        _ts.$axios.$get('/api/user-info/check-nickname', {
-          params: {
-            idUser: _ts.user.idUser,
-            nickname: _ts.user.nickname
-          }
-        }).then(function (res) {
-          if (res && !res.success) {
-            _ts.$message.error(res.message);
-          }
-        })
-      },
-      updateUserInfo() {
-        let _ts = this;
-        let user = _ts.user;
-        _ts.updateUser(user);
-      },
-      updateUser(user) {
-        let _ts = this;
-        _ts.$refs['user'].validate((valid) => {
-          if (valid) {
-            _ts.$axios.$patch('/api/user-info/update', user).then(function (res) {
-              if (res) {
-                if (!res.success) {
-                  _ts.$message.error(res.message);
-                } else {
-                  _ts.$set(_ts, 'user', res.result);
-                  _ts.$store.commit('setUserInfo', res.result);
-                  _ts.$message.success('更新成功 !');
-                }
-              }
-            })
-          } else {
-            _ts.$message.error('数据异常 !');
-          }
-        });
-      },
-      updateUserExtend() {
-        let _ts = this;
-        let userExtend = _ts.userExtend;
-        _ts.$axios.$patch('/api/user-info/update-extend', userExtend).then(function (res) {
-          if (res) {
-            if (res.message) {
-              _ts.$message.error(res.message);
-            } else {
-              _ts.$set(_ts, 'userExtend', res.result);
-              _ts.$message.success('更新成功 !');
-            }
-          }
-        })
-      }
-    },
-    mounted() {
-      this.$store.commit('setActiveMenu', 'account');
-      this.getData();
+    checkNickname() {
+      let _ts = this;
+      _ts.$axios.$get('/api/user-info/check-nickname', {
+        params: {
+          idUser: _ts.user.idUser,
+          nickname: _ts.user.nickname
+        }
+      }).then(function (res) {
+        console.log(res)
+      })
     }
+    ,
+    updateUserInfo() {
+      let _ts = this;
+      let user = _ts.user;
+      _ts.updateUser(user);
+    }
+    ,
+    updateUser(user) {
+      let _ts = this;
+      _ts.$refs['user'].validate((valid) => {
+        if (valid) {
+          _ts.$axios.$patch('/api/user-info/update', user).then((res) => {
+            _ts.$set(_ts, 'user', res);
+            _ts.$store.commit('setUserInfo', res);
+            _ts.$message.success('更新成功 !');
+          })
+        } else {
+          _ts.$message.error('数据异常 !');
+        }
+      });
+    }
+    ,
+    updateUserExtend() {
+      let _ts = this;
+      let userExtend = _ts.userExtend;
+      _ts.$axios.$patch('/api/user-info/update-extend', userExtend).then((res) => {
+        if (res) {
+          _ts.$set(_ts, 'userExtend', res);
+          _ts.$message.success('更新成功 !');
+        }
+      })
+    }
+  },
+  mounted() {
+    this.$store.commit('setActiveMenu', 'account');
+    this.getData();
   }
+}
 </script>
 
 <style scoped>

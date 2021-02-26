@@ -182,7 +182,6 @@ export default {
           Cookie.remove('auth')
           _ts.$store.commit('setAuth', null)
           item = 'login';
-          break;
         default:
           _ts.$router.push({
             name: item

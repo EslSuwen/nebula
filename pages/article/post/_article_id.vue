@@ -284,23 +284,13 @@ export default {
         articleTags: _ts.articleTags.join(","),
         articleStatus: 1
       };
-      _ts.$axios[id ? '$put' : '$post']('/api/article/post', article).then(function (res) {
-        if (res) {
-          if (res.message) {
-            _ts.$message(res.message);
-            _ts.doLoading = false;
-            return false;
-          }
-          localStorage.removeItem('article-title');
-          localStorage.removeItem('article-tags');
-          _ts.contentEditor.setValue('');
-          _ts.$router.push({
-            path: `/draft/${res.id}`
-          })
-        }
-      })
-    }
-    ,
+      let result = await _ts.$axios[id ? '$put' : '$post']('/api/article/post', article)
+
+      localStorage.removeItem('article-title');
+      localStorage.removeItem('article-tags');
+      _ts.contentEditor.setValue('');
+      _ts.$router.push({path: `/draft/${result}`})
+    },
     getTags() {
       let _ts = this;
       _ts.$axios.$get('/api/tag/tags').then(function (res) {
