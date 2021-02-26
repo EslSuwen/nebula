@@ -74,16 +74,9 @@ export default {
       let _ts = this;
       _ts.$axios.$post(`/api/article/${_ts.idArticle}/update-tags`, {
         articleTags: _ts.articleTags.join(',')
-      }).then(function (res) {
-        if (res) {
-          if (res.success) {
-            _ts.$emit('closeDialog');
-          } else {
-            _ts.$message(res.message)
-          }
-        } else {
-          _ts.$message("更新失败!")
-        }
+      }).then((res) => {
+        this.$message(res)
+        _ts.$emit('closeDialog');
       })
     }
   },

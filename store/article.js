@@ -87,12 +87,6 @@ export const actions = {
   // 获取文章详情
   fetchDetail({commit, state}, params = {}) {
     commit('updateDetailFetching', true)
-    // 当前文章判断
-    let currentData = JSON.parse(JSON.stringify(state)).detail.data
-    if (Number(params.article_id) === currentData.idArticle) {
-      commit('updateDetailFetching', false)
-      return
-    }
     return this.$axios.$get(`${BASE_API_PATH}/article/${params.article_id}`)
       .then(data => commit('updateDetailData', data))
       .finally(commit('updateDetailFetching', false))
