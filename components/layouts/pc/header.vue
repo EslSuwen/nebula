@@ -31,7 +31,7 @@
       <el-col :xs="6" :sm="6" :md="6" :xl="3" style="padding-top: 1rem;">
         <client-only>
           <el-col v-if="user" style="text-align: right;">
-            <el-link rel="nofollow" :underline="false" style="padding-left: 10px;padding-right: 10px;"
+            <el-link v-if="false" rel="nofollow" :underline="false" style="padding-left: 10px;padding-right: 10px;"
                      href="/portfolio/post">创建作品集
             </el-link>
             <el-link rel="nofollow" :underline="false" style="padding-left: 10px;padding-right: 10px;"

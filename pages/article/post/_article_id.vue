@@ -168,7 +168,7 @@ export default {
           }
         },
         upload: {
-          max: 10 * 1024 * 1024,
+          max: 1024 * 1024 * 1024,
           url: this.tokenURL.URL,
           linkToImgUrl: this.tokenURL.linkToImageURL,
           token: this.tokenURL.token,
@@ -259,6 +259,7 @@ export default {
       localStorage.removeItem('article-title');
       localStorage.removeItem('article-tags');
       _ts.contentEditor.setValue('');
+      _ts.$store.dispatch('article/fetchList', {force: true})
       _ts.$router.push({path: `/article/${result}`})
 
     },
@@ -302,6 +303,7 @@ export default {
     _ts.$store.commit('setActiveMenu', 'post-article');
     const responseData = await _ts.$axios.$get('/api/upload/token');
     if (responseData) {
+      console.log(responseData)
       _ts.$set(_ts, 'tokenURL', {
         token: responseData.uploadToken || '',
         URL: responseData.uploadURL || '',
