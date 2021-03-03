@@ -88,7 +88,6 @@ export default {
           }
 
           _ts.$axios.$post('/api/console/login', data).then(function (res) {
-            console.log(res)
             _ts.$set(_ts, 'loginLoading', false);
             if (res) {
               let auth = {
@@ -119,7 +118,6 @@ export default {
       });
     },
     thirdLoginCallBack(params) {
-      console.log(params)
       if (!params || !params.token) {
         return
       }
@@ -139,7 +137,6 @@ export default {
         role: data.weights
       }
       let user = {
-        // FIXME nickname 无法正常获取
         nickname: data.nickname,
         avatarURL: data.avatarURL
       }

@@ -40,7 +40,7 @@
                   </el-tag>
                 </el-col>
                 <el-col v-if="user" :span="12" style="text-align: right;">
-                  <template v-if="user.idUser !== article.articleAuthorId">
+                  <template v-if="user.idUser != article.articleAuthorId">
                     <el-button size="mini" v-if="isFollow" @click="cancelFollowUser(article.articleAuthorId)" plain>
                       取消关注
                     </el-button>
@@ -52,15 +52,10 @@
                     <el-button v-if="isPerfect" size="mini" @click="cancelPreference" plain>取消优选</el-button>
                     <el-button v-else size="mini" @click="setPreference" plain>设为优选</el-button>
                   </template>
-                  <el-button size="mini" @click="handleCommand('share')" plain>分享</el-button>
                 </el-col>
                 <el-col v-else :span="12" style="text-align: right;">
                   <el-button size="mini" @click="gotoLogin" plain>关注</el-button>
-                  <el-button size="mini" @click="handleCommand('share')" plain>分享</el-button>
                 </el-col>
-              </el-col>
-              <el-col v-if="isShare" style="margin-bottom: 1rem;">
-                <share-box :url="shareData.shareUrl"></share-box>
               </el-col>
               <el-col v-if="article.portfolios && article.portfolios.length > 0">
                 <portfolios-widget :portfolios="article.portfolios"></portfolios-widget>
@@ -112,14 +107,12 @@
 <script>
 import Vue from 'vue';
 import {mapState} from 'vuex';
-import ShareBox from '~/components/widget/share';
 import PortfoliosWidget from '~/components/widget/portfolios';
 import EditTags from '~/components/widget/tags';
 
 export default {
   name: "ArticleDetail",
   components: {
-    ShareBox,
     PortfoliosWidget,
     EditTags
   },
@@ -200,11 +193,9 @@ export default {
   data() {
     return {
       loading: false,
-      isShare: false,
       dialogVisible: false,
       isFollow: false,
       isPerfect: false,
-      shareData: {}
     }
   },
   methods: {
@@ -223,22 +214,6 @@ export default {
         })
       } else if (item === 'editTag') {
         _ts.$set(_ts, 'dialogVisible', true);
-      } else {
-        if (_ts.isShare) {
-          _ts.$set(_ts, 'isShare', false);
-        } else {
-          if (_ts.user) {
-            _ts.$axios.$get('/api/article/' + _ts.article.idArticle + '/share').then(function (res) {
-              if (res) {
-                _ts.$set(_ts, 'shareData', res);
-                _ts.$set(_ts, 'isShare', true);
-              }
-            });
-          } else {
-            _ts.$set(_ts, 'shareData', {shareUrl: _ts.article.articlePermalink});
-            _ts.$set(_ts, 'isShare', true);
-          }
-        }
       }
     },
     gotoLogin() {

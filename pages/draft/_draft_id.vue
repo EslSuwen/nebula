@@ -121,13 +121,6 @@ export default {
         _ts.$router.push({
           path: `/article/post/${_ts.article.idArticle}`
         })
-      } else {
-        _ts.$axios.$get('/api/article/' + _ts.article.idArticle + '/share').then(function (res) {
-          if (res) {
-            _ts.$set(_ts, 'shareData', res);
-            _ts.$set(_ts, 'isShare', true);
-          }
-        });
       }
     },
     gotoLogin() {
