@@ -11,12 +11,13 @@ const apisMap = {
     domianURL: 'http://localhost:8099/forest'
   },
   production: {
-    FE: 'http://10.26.201.17:32240/',
-    BASE: 'http://10.26.201.17:32241/forest',
-    CDN: 'https://static.rymcu.com',
-    PROXY: 'http://10.26.201.17:32240/proxy',
+    FE: 'http://localhost:8099',
+    BASE: 'http://localhost:8099',
+    CDN: '',
+    PROXY: '/proxy',
     SOCKET: 'http://localhost:3000',
-    GRAVATAR: 'https://static.rymcu.com/avatar'
+    GRAVATAR: '/proxy/static.rymcu.com/avatar',
+    domianURL: 'http://localhost:8099/forest'
   }
 }
 
