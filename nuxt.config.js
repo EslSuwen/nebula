@@ -11,7 +11,7 @@ export default {
   */
   ssr: false,
   router: {
-    base: '/',
+    base: '/static/',
     mode: 'hash'
   },
   /*
