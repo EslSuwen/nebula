@@ -144,6 +144,8 @@ export default {
           _ts.contentEditor.setValue(data.value ? data.value : '');
         },
         preview: {
+          actions:
+            ["desktop", "tablet", "mobile"],
           hljs: {
             enable: true,
             lineNumber: true,

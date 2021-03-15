@@ -51,7 +51,8 @@ export default function ({app, $axios, store, redirect}) {
       redirect('/400');
     } else {
       console.log(error.data);
-      Message.error(error.data.message)
+      let message = !error || !error.data || !error.message ? '发生未知错误！' : error.data.message
+      Message.error(message)
     }
   })
 }
