@@ -1,12 +1,12 @@
 <template>
   <el-row justify="space-between" type="flex">
     <el-col>
-      <el-col :xs="8" :sm="4" :md="6" :xl="3" style="padding-top: .5rem;text-align: left;">
+      <el-col :xs="0" :sm="6" :md="6" :xl="7" style="padding-top: .5rem;text-align: left;">
         <a rel="nofollow" class="navbar-brand" href="/">
-          <img src="@/assets/bilogo@3x.png" alt="bi" class="navbar-brand-img">
+          <img src="@/assets/headlogo.png" alt="bi" class="navbar-brand-img">
         </a>
       </el-col>
-      <el-col :xs="0" :sm="8" :md="8" :xl="12" style="text-align: center;">
+      <el-col :xs="8" :sm="6" :md="8" :xl="8" style="text-align: center;">
         <el-row type="flex" justify="center">
           <el-col>
             <el-menu :default-active="activeMenu" style="margin-top: -2px;border: 0;" mode="horizontal"
