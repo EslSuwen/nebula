@@ -82,7 +82,6 @@ export default {
   proxy: [  //proxy配置
     ['/api', {
       target: apiConfig.BASE,  //api请求路径
-      pathRewrite: {'^/api': isDevMode ? '/api/v1' : '/api/v1'}  //重定向请求路径，防止路由、api路径的冲突
     }]
   ],
   /*

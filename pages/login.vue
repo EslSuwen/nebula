@@ -3,7 +3,7 @@
     <el-col :xs="24" :sm="12" :xl="12" class="verify-wrap flex-inline">
       <el-form :model="user" ref="user" status-icon label-width="100px" style="width: 375px;">
         <el-form-item>
-          <img src="~/assets/rymcu.png" alt="RYMCU" class="icon-rymcu">
+          <img src="@/assets/bilogo@3x.png" alt="bilogo" class="icon-rymcu">
         </el-form-item>
         <el-form-item style="text-align: center;margin-top: 4rem">
           <el-button type="primary"
@@ -33,8 +33,8 @@
     </el-col>
     <el-col :xs="24" :sm="12" :xl="12" class="intro vditor-reset verify__sign">
       <div>
-        <h2>欢迎来到 RYMCU</h2>
-        <p><a rel="nofollow" href="/">RYMCU</a> 是一个知识共享平台。</p>
+        <h2>欢迎访问 商智神州知识库</h2>
+        <p><a rel="nofollow" href="/">商智神州知识库</a> 是一个知识共享平台。</p>
       </div>
     </el-col>
   </el-row>
@@ -165,7 +165,7 @@ export default {
 .icon-rymcu {
   margin: 0 auto;
   display: block;
-  height: 4rem;
+  height: 2rem;
 }
 
 .verify .verify-wrap {

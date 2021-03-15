@@ -13,7 +13,7 @@
         <el-col>
           <el-col class="row align-items-center">
             <el-col class="col-auto">
-              Copyright © 2020
+              Copyright © 2021
               <el-link rel="nofollow" :underline="false" href="/" style="vertical-align: baseline;"><span>{{ systemName }}</span>
               </el-link>
             </el-col>
@@ -30,9 +30,9 @@
     data() {
       return {
         systemTitle: '\u7f57\u5409\u7f51\u0020\u002d\u0020\u5185\u5bb9\u5206\u4eab\u751f\u6001\u5e73\u53f0',
-        systemName: 'RYMCU',
+        systemName: '知识库',
         systemUrl: '/',
-        slogan: 'RYMCU · 知识学习交流平台 ',
+        slogan: '商智神州 - 知识库',
         markdownGuide: '/guides/markdown',
       }
     }

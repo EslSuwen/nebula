@@ -1,9 +1,9 @@
 <template>
   <el-row justify="space-between" type="flex">
     <el-col>
-      <el-col :xs="8" :sm="4" :md="4" :xl="3" style="padding-top: .5rem;text-align: left;">
+      <el-col :xs="8" :sm="4" :md="6" :xl="3" style="padding-top: .5rem;text-align: left;">
         <a rel="nofollow" class="navbar-brand" href="/">
-          <img src="@/assets/rymcu.png" alt="RYMCU" class="navbar-brand-img">
+          <img src="@/assets/bilogo@3x.png" alt="bi" class="navbar-brand-img">
         </a>
       </el-col>
       <el-col :xs="0" :sm="8" :md="8" :xl="12" style="text-align: center;">
@@ -20,7 +20,7 @@
       </el-col>
       <el-col :xs="10" :sm="6" :md="6" :xl="6" style="padding-top: 1rem;text-align: right;">
         <el-input
-          :disabled="$router.currentRoute.path==='/search'"
+          v-show="$router.currentRoute.path !=='/search'"
           placeholder="请输入关键词进行搜索"
           prefix-icon="el-icon-search"
           size="small"
@@ -28,7 +28,7 @@
           @change="violetSearch">
         </el-input>
       </el-col>
-      <el-col :xs="6" :sm="6" :md="6" :xl="3" style="padding-top: 1rem;">
+      <el-col :xs="6" :sm="6" :md="4" :xl="3" style="padding-top: 1rem;">
         <client-only>
           <el-col v-if="user" style="text-align: right;">
             <el-link v-if="false" rel="nofollow" :underline="false" style="padding-left: 10px;padding-right: 10px;"

@@ -22,7 +22,6 @@
   import HeaderView from "./header";
   import FooterView from "./footer";
   import wx from "~/assets/weixin.png";
-  import gzh from "~/assets/rymcugzh.jpg";
 
   export default {
     name: "PcMain",
@@ -43,7 +42,6 @@
       return {
         isShow: false,
         wx: wx,
-        gzh: gzh
       }
     },
     methods: {

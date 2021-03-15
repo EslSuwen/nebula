@@ -1,9 +1,9 @@
 export const meta = {
-  title: 'RYMCU - 知识学习交流平台',
-  keywords: 'RYMCU',
-  description: 'RYMCU',
+  title: '商智神州 - 知识库',
+  keywords: '商智神州, 知识库',
+  description: '商智神州知识库系统',
   url: '/',
-  author: 'rymcu',
+  author: 'cn.bi',
   email: '/'
 }
 

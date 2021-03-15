@@ -38,15 +38,9 @@ template>
 <script>
   import Vue from 'vue';
   import {mapState} from 'vuex';
-  import socket from '~/plugins/socket.io.js';
 
   export default {
     name: "Chat",
-    asyncData() {
-      return new Promise(resolve =>
-        socket.emit('last-messages', messages => resolve({messages}))
-      )
-    },
     computed: {
       ...mapState({
         user: state => state.userInfo
