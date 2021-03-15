@@ -28,11 +28,11 @@ export default function ({app, $axios, store, redirect}) {
         } else if (response.data.code === '401') {
           Cookie.remove('auth');
           store.commit('setAuth', null);
-          window.location.reload()
+          redirect('/login')
         } else if (response.data.code === '402') {
           Cookie.remove('auth');
           store.commit('setAuth', null);
-          window.location.reload()
+          redirect('/login')
         } else if (response.data.code === '404') {
           Message.error('操作失败，请稍后再试......')
         } else if (response.data.code === '500') {
@@ -40,6 +40,7 @@ export default function ({app, $axios, store, redirect}) {
         } else {
           Message.error(response.data.message);
         }
+        return Promise.reject(response);
       }
       return Promise.reject(response);
     }
@@ -49,8 +50,8 @@ export default function ({app, $axios, store, redirect}) {
     if (code === 400) {
       redirect('/400');
     } else {
-      Message.error(error.data.message)
       console.log(error.data);
+      Message.error(error.data.message)
     }
   })
 }
