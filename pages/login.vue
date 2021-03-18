@@ -42,7 +42,6 @@
 
 <script>
 import {mapState} from 'vuex';
-import apiConfig from "@/config/api.config";
 
 const Cookie = process.client ? require('js-cookie') : undefined
 export default {
@@ -88,7 +87,6 @@ export default {
           }
 
           _ts.$axios.$post('/api/console/login', data).then(function (res) {
-            _ts.$set(_ts, 'loginLoading', false);
             if (res) {
               let auth = {
                 accessToken: res.token,
@@ -111,7 +109,7 @@ export default {
                 })
               }
             }
-          })
+          }).finally(() => _ts.$set(_ts, 'loginLoading', false))
         } else {
           return false;
         }
