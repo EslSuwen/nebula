@@ -182,15 +182,15 @@ export default {
     handleSizeChange(pageSize) {
       let _ts = this;
       _ts.$store.dispatch('admin/fetchUsers', {
-        page: _ts.pagination.currentPage,
-        rows: pageSize
+        page: pageSize,
+        rows: _ts.userPage.size
       })
     },
     handleCurrentChange(page) {
       let _ts = this;
       _ts.$store.dispatch('admin/fetchUsers', {
         page: page,
-        rows: _ts.pagination.pageSize
+        rows: 10
       })
     },
     updateRole() {

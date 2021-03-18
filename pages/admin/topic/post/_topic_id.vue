@@ -113,44 +113,44 @@ export default {
     _initEditor(data) {
       let _ts = this;
 
-        let toolbar = [
-          'emoji',
-          'headings',
-          'bold',
-          'italic',
-          'strike',
-          'link',
-          '|',
-          'list',
-          'ordered-list',
-          'check',
-          'outdent',
-          'indent',
-          '|',
-          'quote',
-          'line',
-          'code',
-          'inline-code',
-          'insert-before',
-          'insert-after',
-          '|',
-          'upload',
-          // 'record',
-          'table',
-          '|',
-          'undo',
-          'redo',
-          '|',
-          'edit-mode',
-          {
-            name: 'more',
-            toolbar: [
-              'fullscreen',
-              'both',
-              'preview',
-              'info'
-            ],
-          }]
+      let toolbar = [
+        'emoji',
+        'headings',
+        'bold',
+        'italic',
+        'strike',
+        'link',
+        '|',
+        'list',
+        'ordered-list',
+        'check',
+        'outdent',
+        'indent',
+        '|',
+        'quote',
+        'line',
+        'code',
+        'inline-code',
+        'insert-before',
+        'insert-after',
+        '|',
+        'upload',
+        // 'record',
+        'table',
+        '|',
+        'undo',
+        'redo',
+        '|',
+        'edit-mode',
+        {
+          name: 'more',
+          toolbar: [
+            'fullscreen',
+            'both',
+            'preview',
+            'info'
+          ],
+        }]
       return new Vue.Vditor(data.id, {
         toolbar,
         mode: 'sv',
@@ -190,9 +190,7 @@ export default {
           url: this.tokenURL.URL,
           linkToImgUrl: this.tokenURL.linkToImageURL,
           token: this.tokenURL.token,
-          filename: name => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').
-          replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').
-          replace('/\\s/g', '')
+          filename: name => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', '')
         },
         height: data.height,
         counter: 102400,
@@ -205,11 +203,12 @@ export default {
     },
     handleAvatarSuccess(res) {
       let _ts = this;
-      if (res && res.data && res.data.url) {
+      console.log(res)
+      if (res && res.success && res.result) {
         let topic = _ts.topic;
-        topic.topicIconPath = res.data.url;
+        topic.topicIconPath = res.result;
         _ts.$set(_ts, 'topic', topic);
-        _ts.$set(_ts, 'topicIconPath', res.data.url);
+        _ts.$set(_ts, 'topicIconPath', res.result);
       } else {
         _ts.$message.error('上传失败!');
       }
@@ -273,7 +272,7 @@ export default {
       const responseData = await _ts.$axios.$get('/api/admin/topic/detail/' + _ts.$route.params.topic_id);
       _ts.$set(_ts, 'topic', responseData);
       if (responseData.topicIconPath) {
-        _ts.$set(_ts,'topicIconPath',responseData.topicIconPath);
+        _ts.$set(_ts, 'topicIconPath', responseData.topicIconPath);
       }
     } else {
       _ts.$set(_ts, 'isEdit', false);
@@ -296,5 +295,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~vditor/src/assets/scss/index.scss";
+@import "~vditor/src/assets/scss/index.scss";
 </style>

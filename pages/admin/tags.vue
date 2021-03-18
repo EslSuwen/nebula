@@ -72,7 +72,7 @@ export default {
           if (res && res.message) {
             _ts.$message.error(res.message);
           } else {
-            const p = _ts.pagination.currentPage;
+            const p = _ts.tagPage.current;
             _ts.currentChange(p);
             _ts.$message({
               type: 'success',

@@ -34,10 +34,10 @@
     </el-col>
     <el-col>
       <div class="vertical-container text-center">
-        <el-pagination :hide-on-single-page="true" v-model="articles.pagination"
+        <el-pagination :hide-on-single-page="true"
                        layout="prev, pager, next"
-                       :current-page="articles.pagination.currentPage"
-                       :total="articles.pagination.total"
+                       :current-page="articles.current"
+                       :total="articles.total"
                        @current-change="currentChange">
         </el-pagination>
       </div>
@@ -86,7 +86,7 @@
         let _ts = this;
         const responseTopData = await this.$axios.$get('/api/console/portfolio/' + _ts.idPortfolio + '/articles?page='+page);
         if (responseTopData) {
-          responseTopData.pagination.currentPage = page;
+          responseTopData.current = page;
           _ts.$set(_ts, 'articles', responseTopData);
           window.scrollTo(0, 0);
         }
@@ -122,7 +122,7 @@
           }).then(function (res) {
             if (res) {
               _ts.$message(res.message);
-              _ts.currentChange(_ts.articles.pagination.currentPage);
+              _ts.currentChange(_ts.articles.current);
             }
           })
         }).catch(() => {

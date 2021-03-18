@@ -9,7 +9,8 @@
     </el-col>
     <el-col v-if="topic.idTopic">
       <el-col :span="2" class="text-right">
-        <img :src="topic.topicIconPath" :alt="topic.topicTitle" class="topic-brand-img">
+        <img :src="!topic.topicIconPath?'http://10.26.201.17:32280/logo.png':topic.topicIconPath"
+             class="topic-brand-img">
       </el-col>
       <el-col :span="20">
         <el-col>
@@ -32,7 +33,7 @@
           </el-col>
         </el-col>
       </el-col>
-      <el-col v-for="tag in tags" :key="tag.idTag">
+      <el-col v-for="tag in tagPage.records" :key="tag.idTag">
         <el-card style="margin: .5rem;">
           <el-col :span="1">
             <el-avatar shape="square" :src="tag.tagIconPath" fit="scale-down"></el-avatar>
@@ -90,7 +91,7 @@ export default {
   computed: {
     ...mapState({
       topic: state => state.topic.detail.data,
-      tagPage: state => state.topic.tags.data,
+      tagPage: state => state.topic.tags.tagPage,
     }),
     hasPermissions() {
       return this.$store.getters.hasPermissions('topic');

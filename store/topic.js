@@ -7,24 +7,13 @@
 export const TOPIC_API_PATH = '/api/topic'
 export const ADMIN_API_PATH = '/api/admin'
 
-const getDefaultListData = () => {
-  return {
-    topicPage: {},
-  }
-}
-const getDefaultTagsData = () => {
-  return {
-    tagPage: {},
-  }
-}
-
 export const state = () => {
   return {
     fetching: false,
     data: [],
     list: {
       fetching: false,
-      data: getDefaultListData()
+      topicPage: {}
     },
     detail: {
       fetching: false,
@@ -32,7 +21,7 @@ export const state = () => {
     },
     tags: {
       fetching: false,
-      data: getDefaultTagsData()
+      tagPage: {}
     }
   }
 }
@@ -42,7 +31,7 @@ export const mutations = {
     state.list.fetching = action
   },
   updateListData(state, action) {
-    state.list.data = action
+    state.list.topicPage = action
   },
   updateFetching(state, action) {
     state.fetching = action
@@ -60,14 +49,14 @@ export const mutations = {
     state.tags.fetching = action
   },
   updateTopicTagsData(state, action) {
-    state.tags.data = action
+    state.tags.tagPage = action
   }
 }
 
 export const actions = {
   async fetchList({commit}, params = {}) {
     // 清空已有数据
-    commit('updateListData', getDefaultListData())
+    commit('updateListData', {})
     commit('updateListFetching', true)
     let parameters = {
       page: params.page || 1
@@ -95,17 +84,18 @@ export const actions = {
   },
   async fetchTopicTags({commit}, params) {
     commit('updateTopicTagsFetching', true);
-    let data = this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/topic/${params.topic_uri}/tags?page=${params.page}`)
     commit('updateTopicTagsData', data)
     commit('updateTopicTagsFetching', false)
   },
   async fetchUnBindTags({commit}, params) {
     commit('updateTopicTagsFetching', true);
-    let data = this.$axios
+    let data = await this.$axios
       .$get(`${ADMIN_API_PATH}/topic/unbind-topic-tags`, {
         params: params
       })
+    console.log(data)
     commit('updateTopicTagsData', data)
     commit('updateTopicTagsFetching', false)
   }

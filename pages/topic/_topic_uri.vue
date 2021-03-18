@@ -33,7 +33,8 @@ export default {
       let _ts = this
       _ts.$store.dispatch('article/fetchList', {
         topic_uri: _ts.defaultParams.topic_uri,
-        page: _ts.defaultParams.page || 1
+        page: _ts.defaultParams.page || 1,
+        force: true
       })
     }
   },

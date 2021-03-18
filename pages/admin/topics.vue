@@ -13,7 +13,8 @@
       <el-card>
         <div class="card-body d-flex flex-column">
           <el-col :span="4" style="text-align: right;">
-            <img :src="topic.topicIconPath" :alt="topic.topicTitle" class="topic-brand-img">
+            <img :src="!topic.topicIconPath?'http://10.26.201.17:32280/logo.png':topic.topicIconPath"
+                 class="topic-brand-img">
           </el-col>
           <el-col :span="20">
             <el-col>
@@ -35,39 +36,39 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+import {mapState} from 'vuex';
 
-  export default {
-    name: "topics",
-    fetch({store, params, error}) {
-      return Promise.all([
-        store
-          .dispatch('topic/fetchList', params)
-          .catch(err => error({statusCode: 404}))
-      ])
-    },
-    computed: {
-      ...mapState({
-        topicPage: state => state.topic.list.data,
+export default {
+  name: "topics",
+  fetch({store, params, error}) {
+    return Promise.all([
+      store
+        .dispatch('topic/fetchList', params)
+        .catch(err => error({statusCode: 404}))
+    ])
+  },
+  computed: {
+    ...mapState({
+      topicPage: state => state.topic.list.topicPage,
+    })
+  },
+  methods: {
+    onRouter(item, data) {
+      this.$router.push({
+        path: '/admin/topic/' + data
       })
     },
-    methods: {
-      onRouter(item, data) {
-        this.$router.push({
-          path: '/admin/topic/' + data
-        })
-      },
-      createTopic() {
-        let _ts = this;
-        _ts.$router.push({
-          path: '/admin/topic/post'
-        })
-      }
-    },
-    mounted() {
-      this.$store.commit("setActiveMenu", "admin-topics");
+    createTopic() {
+      let _ts = this;
+      _ts.$router.push({
+        path: '/admin/topic/post'
+      })
     }
+  },
+  mounted() {
+    this.$store.commit("setActiveMenu", "admin-topics");
   }
+}
 </script>
 
 <style scoped>

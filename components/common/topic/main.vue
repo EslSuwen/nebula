@@ -4,7 +4,8 @@
       <el-menu type="border-card" :default-active="currentTopic" style="margin-top: -2px;border: 0;" mode="horizontal"
                @select="handleSelectTopic">
         <el-menu-item index="news">最新</el-menu-item>
-        <el-menu-item v-for="topic in topicPage.records" :key="topic.idTopic" :index="topic.topicUri">{{topic.topicTitle}}
+        <el-menu-item v-for="topic in navs" :key="topic.idTopic" :index="topic.topicUri">
+          {{ topic.topicTitle }}
         </el-menu-item>
       </el-menu>
     </el-col>
@@ -12,30 +13,36 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+import {mapState} from 'vuex'
 
-  export default {
-    name: "topicNav",
-    props: {
-      currentTopic: {
-        type: String,
-        default: 'news'
-      }
-    },
-    computed: {
-      ...mapState({
-        topicPage: state => state.topic.list.data,
-        isFetching: state => state.topic.fetching
-      })
-    },
-    methods: {
-      handleSelectTopic(item) {
-        this.$router.push({
-          path: `/topic/${item}?page=1`
-        });
-      }
+export default {
+  name: "topicNav",
+  props: {
+    currentTopic: {
+      type: String,
+      default: 'news'
     }
-  }
+  },
+  fetch({store, error}) {
+    return Promise.all([
+      store.dispatch('topic/fetchNavList')
+    ])
+  },
+  computed: {
+    ...mapState({
+      topicPage: state => state.topic.list.topicPage,
+      navs: state => state.topic.data,
+      isFetching: state => state.topic.fetching
+    })
+  },
+  methods: {
+    handleSelectTopic(item) {
+      this.$router.push({
+        path: `/topic/${item}?page=1`
+      });
+    }
+  },
+}
 </script>
 
 <style scoped>

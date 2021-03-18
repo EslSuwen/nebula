@@ -37,7 +37,7 @@
           prop="status">
           <template slot-scope="scope">
             <el-tag type="primary" disable-transitions>
-              {{scope.row.status === '0' ? '正常' : '禁用'}}
+              {{ scope.row.status === '0' ? '正常' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -47,7 +47,8 @@
             <el-button v-if="scope.row.status == 1" size="mini" type="primary"
                        @click="toggleStatus(scope.$index, scope.row)" plain>启用
             </el-button>
-            <el-button v-else size="mini" type="danger" @click="toggleStatus(scope.$index, scope.row)" plain>禁用</el-button>
+            <el-button v-else size="mini" type="danger" @click="toggleStatus(scope.$index, scope.row)" plain>禁用
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,48 +88,79 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+import {mapState} from 'vuex';
 
-  export default {
-    name: "roles",
-    fetch({store, params, error}) {
-      return Promise.all([
-        store
-          .dispatch('admin/fetchRoles', params)
-          .catch(err => error({statusCode: 404}))
-      ])
+export default {
+  name: "roles",
+  fetch({store, params, error}) {
+    return Promise.all([
+      store
+        .dispatch('admin/fetchRoles', params)
+        .catch(err => error({statusCode: 404}))
+    ])
+  },
+  computed: {
+    ...mapState({
+      rolePage: state => state.admin.role.rolePage
+    })
+  },
+  data() {
+    return {
+      order: 'desc',
+      role: {},
+      title: '',
+      dialogVisible: false
+    }
+  },
+  methods: {
+    showAddDialog() {
+      let _ts = this;
+      _ts.$set(_ts, 'dialogVisible', true);
+      _ts.$set(_ts, 'title', '添加角色信息');
+      _ts.$set(_ts, 'role', {weights: 10});
     },
-    computed: {
-      ...mapState({
-        rolePage: state => state.admin.role.rolePage
+    handleEdit(index, role) {
+      let _ts = this;
+      _ts.$set(_ts, 'dialogVisible', true);
+      _ts.$set(_ts, 'title', '编辑角色信息');
+      _ts.$set(_ts, 'role', role);
+    },
+    updateRole() {
+      let _ts = this;
+      let id = _ts.role.idRole;
+      let title = id ? '更新' : '添加';
+      _ts.$axios[id ? '$put' : '$post']('/api/admin/role/post', _ts.role).then(function (res) {
+        if (res && res.message) {
+          _ts.$message.error(res.message);
+        } else {
+          _ts.$message({
+            type: 'success',
+            message: title + '成功!'
+          });
+          _ts.$set(_ts, 'dialogVisible', false);
+          _ts.handleCurrentChange(1);
+        }
       })
     },
-    data() {
-      return {
-        order: 'desc',
-        role: {},
-        title: '',
-        dialogVisible: false
+    toggleStatus(index, role) {
+      let _ts = this;
+      let title, status;
+      if (role.status == 0) {
+        title = '禁用';
+        status = 1;
+      } else {
+        title = '启用';
+        status = 0;
       }
-    },
-    methods: {
-      showAddDialog() {
-        let _ts = this;
-        _ts.$set(_ts, 'dialogVisible', true);
-        _ts.$set(_ts, 'title', '添加角色信息');
-        _ts.$set(_ts, 'role', {weights: 10});
-      },
-      handleEdit(index, role) {
-        let _ts = this;
-        _ts.$set(_ts, 'dialogVisible', true);
-        _ts.$set(_ts, 'title', '编辑角色信息');
-        _ts.$set(_ts, 'role', role);
-      },
-      updateRole() {
-        let _ts = this;
-        let id = _ts.role.idRole;
-        let title = id ? '更新' : '添加';
-        _ts.$axios[id ? '$put' : '$post']('/api/admin/role/post', _ts.role).then(function (res) {
+      _ts.$confirm('确定' + title + '角色 ' + role.name + '?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        _ts.$axios.$patch('/api/admin/role/update-status', {
+          idRole: role.idRole,
+          status: status
+        }).then(function (res) {
           if (res && res.message) {
             _ts.$message.error(res.message);
           } else {
@@ -136,63 +168,32 @@
               type: 'success',
               message: title + '成功!'
             });
-            _ts.$set(_ts, 'dialogVisible', false);
             _ts.handleCurrentChange(1);
           }
-        })
-      },
-      toggleStatus(index, role) {
-        let _ts = this;
-        let title, status;
-        if (role.status == 0) {
-          title = '禁用';
-          status = 1;
-        } else {
-          title = '启用';
-          status = 0;
-        }
-        _ts.$confirm('确定' + title + '角色 ' + role.name + '?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          _ts.$axios.$patch('/api/admin/role/update-status', {
-            idRole: role.idRole,
-            status: status
-          }).then(function (res) {
-            if (res && res.message) {
-              _ts.$message.error(res.message);
-            } else {
-              _ts.$message({
-                type: 'success',
-                message: title + '成功!'
-              });
-              _ts.handleCurrentChange(1);
-            }
-          });
-        }).catch(() => {
-          _ts.$message({
-            type: 'info',
-            message: '已取消'
-          });
         });
-      },
-      handleSizeChange(pageSize) {
-        let _ts = this;
-        _ts.$store.dispatch('admin/fetchRoles', {
-          page: _ts.pagination.currentPage,
-          rows: pageSize
-        })
-      },
-      handleCurrentChange(page) {
-        let _ts = this;
-        _ts.$store.dispatch('admin/fetchRoles', {
-          page: page,
-          rows: _ts.pagination.pageSize
-        })
-      }
+      }).catch(() => {
+        _ts.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
+    },
+    handleSizeChange(pageSize) {
+      let _ts = this;
+      _ts.$store.dispatch('admin/fetchRoles', {
+        page: _ts.rolePage.current,
+        rows: pageSize
+      })
+    },
+    handleCurrentChange(page) {
+      let _ts = this;
+      _ts.$store.dispatch('admin/fetchRoles', {
+        page: page,
+        rows: _ts.rolePage.size
+      })
     }
   }
+}
 </script>
 
 <style scoped>

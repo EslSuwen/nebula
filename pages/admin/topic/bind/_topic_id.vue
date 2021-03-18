@@ -5,7 +5,10 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item :to="{ path: '/admin/topics' }">专题管理</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/admin/topic/' + topic.topicUri }">{{ topic.topicTitle }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/admin/topic/' + topic.topicUri }">{{
+              topic.topicTitle
+            }}
+          </el-breadcrumb-item>
           <el-breadcrumb-item>关联标签</el-breadcrumb-item>
         </el-breadcrumb>
       </el-col>
@@ -64,7 +67,7 @@ export default {
   computed: {
     ...mapState({
       topic: state => state.topic.detail.data,
-      tagPage: state => state.topic.list.data,
+      tagPage: state => state.topic.tags.tagPage,
     })
   },
   data() {
@@ -95,15 +98,15 @@ export default {
           if (res && res.message) {
             _ts.$message.error(res.message);
           } else {
-            _ts.currentChange(_ts.pagination.currentPage);
+            _ts.currentChange(_ts.tagPage.current);
           }
         })
       }).catch(() => {
-        _ts.currentChange(_ts.pagination.currentPage);
+        _ts.currentChange(_ts.tagPage.current);
       });
     },
     getTags() {
-      this.currentChange(this.pagination.currentPage);
+      this.currentChange(this.tagPage.current);
     }
   },
   mounted() {

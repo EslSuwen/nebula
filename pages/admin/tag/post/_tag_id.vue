@@ -99,44 +99,44 @@ export default {
     _initEditor(data) {
       let _ts = this;
 
-        let toolbar = [
-          'emoji',
-          'headings',
-          'bold',
-          'italic',
-          'strike',
-          'link',
-          '|',
-          'list',
-          'ordered-list',
-          'check',
-          'outdent',
-          'indent',
-          '|',
-          'quote',
-          'line',
-          'code',
-          'inline-code',
-          'insert-before',
-          'insert-after',
-          '|',
-          'upload',
-          // 'record',
-          'table',
-          '|',
-          'undo',
-          'redo',
-          '|',
-          'edit-mode',
-          {
-            name: 'more',
-            toolbar: [
-              'fullscreen',
-              'both',
-              'preview',
-              'info'
-            ],
-          }]
+      let toolbar = [
+        'emoji',
+        'headings',
+        'bold',
+        'italic',
+        'strike',
+        'link',
+        '|',
+        'list',
+        'ordered-list',
+        'check',
+        'outdent',
+        'indent',
+        '|',
+        'quote',
+        'line',
+        'code',
+        'inline-code',
+        'insert-before',
+        'insert-after',
+        '|',
+        'upload',
+        // 'record',
+        'table',
+        '|',
+        'undo',
+        'redo',
+        '|',
+        'edit-mode',
+        {
+          name: 'more',
+          toolbar: [
+            'fullscreen',
+            'both',
+            'preview',
+            'info'
+          ],
+        }]
       return new Vue.Vditor(data.id, {
         toolbar,
         mode: 'sv',
@@ -176,9 +176,7 @@ export default {
           url: this.tokenURL.URL,
           linkToImgUrl: this.tokenURL.linkToImageURL,
           token: this.tokenURL.token,
-          filename: name => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').
-          replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').
-          replace('/\\s/g', '')
+          filename: name => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', '')
         },
         height: data.height,
         counter: 102400,
@@ -233,6 +231,7 @@ export default {
             message: title + '成功!'
           });
           _ts.$set(_ts, 'loading', false);
+          _ts.$store.dispatch('topic/fetchNavList')
           // _ts.getData();
         }
       })
@@ -278,5 +277,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~vditor/src/assets/scss/index.scss";
+@import "~vditor/src/assets/scss/index.scss";
 </style>
