@@ -46,8 +46,10 @@
                     </el-button>
                     <el-button size="mini" v-else @click="followUser(article.articleAuthorId)" plain>关注</el-button>
                   </template>
-                  <el-button size="mini" v-if="hasPermissions" @click="handleCommand('edit')" plain>编辑文章</el-button>
-                  <template v-if="isAdmin">
+                  <el-button size="mini" v-if="article.deleted!==1&&hasPermissions" @click="handleCommand('edit')"
+                             plain>编辑文章
+                  </el-button>
+                  <template v-if="article.deleted!==1&&isAdmin">
                     <el-button size="mini" @click="handleCommand('editTag')" plain>编辑标签</el-button>
                     <el-button v-if="isPerfect" size="mini" @click="cancelPreference" plain>取消置顶</el-button>
                     <el-button v-else size="mini" @click="setPreference" plain>设为置顶</el-button>

@@ -8,11 +8,11 @@
     </el-col>
     <el-col>
       <el-table
+        v-loading="loading"
         :data="articlePage.records"
         :row-class-name="tableRowClassName"
         style="width: 100%;margin-top: 1rem;"
-        @row-click="handleUpdateArticle"
-      >
+        @row-click="handleUpdateArticle">
         <el-table-column
           label="序号"
           width="60"
@@ -35,12 +35,12 @@
         </el-table-column>
         <el-table-column
           label="状态"
-          width="100"
+          width="50"
           prop="articleStatus">
         </el-table-column>
         <el-table-column
           label="访问量"
-          width="100"
+          width="80"
           prop="articleViewCount">
         </el-table-column>
         <el-table-column
@@ -50,9 +50,15 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleDetail(scope.$index, scope.row)" plain>详情</el-button>
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" plain>编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" plain>删除</el-button>
+            <el-button v-show="scope.row.deleted === 0" size="mini" @click="handleEdit(scope.$index, scope.row)" plain>
+              编辑
+            </el-button>
+            <el-button v-show="scope.row.deleted === 0" size="mini" type="danger"
+                       @click="handleDelete(scope.$index, scope.row)" plain>删除
+            </el-button>
+            <el-button v-show="scope.row.deleted === 1" size="mini" type="danger"
+                       @click="revokeDelete(scope.row.idArticle)" plain>撤销删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -83,6 +89,7 @@ export default {
   computed: {},
   data() {
     return {
+      loading: false,
       articlePage: {current: 1, size: 10},
       article: {},
       title: '',
@@ -110,9 +117,6 @@ export default {
     handleEdit(index, article) {
       this.$router.push({path: `/article/post/${article.idArticle}`,})
     },
-    handleDetail(index, article) {
-      this.$router.push({path: `/article/${article.idArticle}`,})
-    },
     async updateEdit(formData) {
       await this.$axios.put(this.url.edit, formData)
       this.dialogVisible = false
@@ -124,8 +128,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
+        this.loading = true
         await this.$axios.delete(`${this.url.remove}/${article.idArticle}`)
-        await this.loadData()
+        await this.loadData().finally(() => this.loading = false)
       }).catch(() => {
         this.$message.info('已取消');
       });
@@ -146,13 +151,18 @@ export default {
         })
     },
     tableRowClassName({row, rowIndex}) {
-      if (row.articleStatus === '1') {
-        return 'draft-status';
-      } else if (row.articleStatus === '9') {
+      if (row.deleted === 1) {
         return 'delete-status';
+      } else if (row.articleStatus === '1') {
+        return 'draft-status';
       }
       return '';
-    }
+    },
+    async revokeDelete(idArticle) {
+      this.loading = true
+      await this.$axios.$delete(`/api/article/revokeDelete/${idArticle}`)
+      await this.loadData().finally(() => this.loading = false)
+    },
   }
 }
 </script>
@@ -165,4 +175,5 @@ export default {
 .el-table .draft-status {
   background: #b78848;
 }
+
 </style>
