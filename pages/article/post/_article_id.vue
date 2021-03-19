@@ -339,6 +339,16 @@ export default {
         value: articleContent
       });
     })
+
+    this.autoSaveTimer = setInterval(() => {
+      this.$message('自动保存中……')
+      this.saveArticle()
+      this.$message.success('自动保存成功！')
+    }, 1000 * 60 * 10);
+
+  },
+  beforeDestroy() {
+    clearInterval(this.autoSaveTimer);
   }
 }
 </script>
