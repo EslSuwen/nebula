@@ -14,11 +14,11 @@
               </h4>
             </el-link>
             <el-tag
-                style="margin-left: 0.5rem;"
-                v-for="tag in article.articleTags.split(',')"
-                :key="tag"
-                size="mini"
-                effect="plain">
+              style="margin-left: 0.5rem;"
+              v-for="tag in article.articleTags.split(',')"
+              :key="tag"
+              size="mini"
+              effect="plain">
               # {{ tag }}
             </el-tag>
             <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
@@ -39,8 +39,13 @@
                 </div>
               </el-col>
               <el-col class="text-right">
+                <el-link rel="nofollow" :underline="false" title="总浏览数">
+                  <font-awesome-icon :icon="['far', 'thumbs-up']"></font-awesome-icon>
+                  <span
+                    style="margin-left: 2px; color: red;">{{ article.articleThumbsUpCount }}</span>
+                </el-link>
                 <el-link rel="nofollow" :underline="false" title="总浏览数"><i class="el-icon-s-data"></i><span
-                    style="color: red;">{{ article.articleViewCount }}</span>
+                  style="color: red;">{{ article.articleViewCount }}</span>
                 </el-link>
               </el-col>
             </el-row>
@@ -83,9 +88,9 @@ export default {
         })
       } else {
         this.$router.push(
-            {
-              path: '/user/' + data
-            }
+          {
+            path: '/user/' + data
+          }
         )
       }
     },
