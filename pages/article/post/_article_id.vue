@@ -344,7 +344,7 @@ export default {
       this.$message('自动保存中……')
       this.saveArticle()
       this.$message.success('自动保存成功！')
-    }, 1000 * 60 * 10);
+    }, 1000 * 60 * 5);
 
   },
   beforeDestroy() {
