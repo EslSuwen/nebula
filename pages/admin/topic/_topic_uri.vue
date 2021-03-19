@@ -20,13 +20,8 @@
             <span class="text-muted" v-else> <span style="color: #F56C6C;">0</span> 引用</span>
           </el-col>
           <el-col v-if="hasPermissions" :span="4" class="text-right">
-            <el-dropdown trigger="click" @command="handleCommand">
-              <el-link :underline="false"><i class="el-icon-more"></i></el-link>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="admin-post-topic">管理</el-dropdown-item>
-                <el-dropdown-item command="admin-bind-topic-tag">关联标签</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-button @click="handleCommand('admin-post-topic')">编辑信息</el-button>
+            <el-button style="margin-top: 1rem" @click="handleCommand('admin-bind-topic-tag')">关联标签</el-button>
           </el-col>
           <el-col>
             <p>{{ topic.topicDescription }}</p>

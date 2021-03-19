@@ -17,7 +17,7 @@
         <el-form-item label="主题名称" prop="topicTitle">
           <el-input v-model="topic.topicTitle"></el-input>
         </el-form-item>
-        <el-form-item label="URI" prop="topicUri">
+        <el-form-item label="路由" prop="topicUri">
           <el-input v-model="topic.topicUri"></el-input>
         </el-form-item>
         <el-form-item label="图标">
@@ -96,7 +96,7 @@ export default {
           {required: true, message: '请输入主题名称', trigger: 'blur'}
         ],
         topicUri: [
-          {required: true, message: '请输入主题uri', trigger: 'blur'}
+          {required: true, message: '请输入主题路由', trigger: 'blur'},
         ]
       },
       loading: false,
@@ -226,28 +226,32 @@ export default {
       }
       return (isJPG || isPNG) && isLt2M;
     },
-    async updateTopic() {
-      let _ts = this;
-      _ts.$set(_ts, 'loading', true);
-      let id = _ts.topic.idTopic;
-      let topicDescription = _ts.contentEditor.getValue();
-      let topicDescriptionHtml = await _ts.contentEditor.getHTML();
-      let data = _ts.topic;
-      data.topicDescription = topicDescription;
-      data.topicDescriptionHtml = topicDescriptionHtml;
-      let title = id ? '更新' : '添加';
-      _ts.$axios[id ? '$put' : '$post']('/api/admin/topic/post', data).then(function (res) {
-        if (res && res.message) {
-          _ts.$message.error(res.message);
-        } else {
-          _ts.$message({
-            type: 'success',
-            message: title + '成功!'
-          });
-          _ts.$set(_ts, 'loading', false);
-          _ts.contentEditor.setValue('');
-          _ts.$router.push({
-            path: `/admin/topic/${data.topicUri}`
+    updateTopic() {
+      this.$refs.topic.validate(async (valid) => {
+        if (valid) {
+          let _ts = this;
+          _ts.$set(_ts, 'loading', true);
+          let id = _ts.topic.idTopic;
+          let topicDescription = _ts.contentEditor.getValue();
+          let topicDescriptionHtml = await _ts.contentEditor.getHTML();
+          let data = _ts.topic;
+          data.topicDescription = topicDescription;
+          data.topicDescriptionHtml = topicDescriptionHtml;
+          let title = id ? '更新' : '添加';
+          _ts.$axios[id ? '$put' : '$post']('/api/admin/topic/post', data).then(function (res) {
+            if (res && res.message) {
+              _ts.$message.error(res.message);
+            } else {
+              _ts.$message({
+                type: 'success',
+                message: title + '成功!'
+              });
+              _ts.$set(_ts, 'loading', false);
+              _ts.contentEditor.setValue('');
+              _ts.$router.push({
+                path: `/admin/topic/${data.topicUri}`
+              })
+            }
           })
         }
       })

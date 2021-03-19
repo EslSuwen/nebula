@@ -13,7 +13,7 @@
         </el-breadcrumb>
       </el-col>
       <el-col>
-        <el-input placeholder="请输入标签名" v-model="tagTitle">
+        <el-input placeholder="请输入标签名" @keyup.enter.native="getTags()" v-model="tagTitle">
           <el-button @click="getTags()" slot="append" icon="el-icon-search"></el-button>
         </el-input>
       </el-col>
