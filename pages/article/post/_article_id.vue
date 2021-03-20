@@ -32,6 +32,18 @@
         </el-option>
       </el-select>
     </el-col>
+    <el-col style="margin-top: 1rem;padding-right:3rem;text-align: right;">
+       <span style="font-size: 12px">
+        自动保存
+         <span v-show="autoSaveFlag">{{ minute }}:{{ second }}</span>
+        <el-switch
+          v-model="autoSaveFlag"
+          @change="resetTimer"
+          active-color="#13ce66"
+          inactive-color="#ff4949">
+      </el-switch>
+      </span>
+    </el-col>
     <el-col v-if="!isEdit" style="margin-top: 1rem;padding-right:3rem;text-align: right;">
       <el-button :loading="doLoading" @click="saveArticle" plain>保存草稿</el-button>
       <el-button type="primary" :loading="doLoading" @click="postArticle" plain>发布</el-button>
@@ -67,7 +79,14 @@ export default {
   computed: {
     ...mapState({
       article: state => state.article.detail.data
-    })
+    }),
+    // 倒计时
+    second: function () {
+      return this.num(this.seconds);
+    },
+    minute: function () {
+      return this.num(this.minutes);
+    },
   },
   data() {
     return {
@@ -87,7 +106,12 @@ export default {
       list: [],
       loading: false,
       doLoading: false,
-      isEdit: false
+      isEdit: false,
+      // 自动保存
+      autoSaveFlag: true,
+      autoSaveTimer: {},
+      minutes: 4, //分
+      seconds: 59, //秒
     }
   },
   methods: {
@@ -265,9 +289,11 @@ export default {
       _ts.$router.push({path: `/article/${result}`})
 
     },
-    async saveArticle() {
+    async saveArticle(autoSave = false) {
       let _ts = this;
-      _ts.doLoading = true;
+      if (!autoSave) {
+        _ts.doLoading = true;
+      }
       let id = _ts.$route.params.article_id;
       let articleContent = _ts.contentEditor.getValue();
       let articleContentHtml = await _ts.contentEditor.getHTML();
@@ -285,7 +311,9 @@ export default {
         articleStatus: 1
       };
       let result = await _ts.$axios[id ? '$put' : '$post']('/api/article/post', article)
-
+      if (autoSave) {
+        return
+      }
       localStorage.removeItem('article-title');
       localStorage.removeItem('article-tags');
       _ts.contentEditor.setValue('');
@@ -298,14 +326,46 @@ export default {
           _ts.$set(_ts, 'list', res);
         }
       })
-    }
+    },
+    // 倒计时
+    num(n) {
+      if (this.minutes === 0 && this.seconds === 0) {
+        this.saveArticle(true)
+        this.$message.success('自动保存成功！')
+        this.resetTimer()
+      }
+      return n < 10 ? '0' + n : '' + n;
+    },
+    // 倒计时
+    timer() {
+      const _this = this;
+      this.autoSaveTimer = window.setInterval(function () {
+        if (_this.seconds === 0 && _this.minutes !== 0) {
+          _this.seconds = 59;
+          _this.minutes -= 1;
+        } else if (_this.minutes === 0 && _this.seconds === 0) {
+          _this.seconds = 0;
+          window.clearInterval(this.autoSaveTimer);
+        } else {
+          _this.seconds -= 1;
+        }
+      }, 1000);
+    },
+    resetTimer() {
+      if (this.autoSaveFlag) {
+        this.minutes = 4
+        this.seconds = 59
+        this.timer()
+      } else {
+        clearInterval(this.autoSaveTimer);
+      }
+    },
   },
   async mounted() {
     let _ts = this;
     _ts.$store.commit('setActiveMenu', 'post-article');
     const responseData = await _ts.$axios.$get('/api/upload/token');
     if (responseData) {
-      console.log(responseData)
       _ts.$set(_ts, 'tokenURL', {
         token: responseData.uploadToken || '',
         URL: responseData.uploadURL || '',
@@ -339,13 +399,22 @@ export default {
         value: articleContent
       });
     })
-
-    this.autoSaveTimer = setInterval(() => {
-      this.$message('自动保存中……')
-      this.saveArticle()
-      this.$message.success('自动保存成功！')
-    }, 1000 * 60 * 5);
-
+    // 倒计时
+    this.timer();
+  },
+  watch: {
+    // 倒计时
+    second: {
+      handler(newVal) {
+        this.num(newVal);
+      },
+    },
+    // 倒计时
+    minute: {
+      handler(newVal) {
+        this.num(newVal);
+      },
+    },
   },
   beforeDestroy() {
     clearInterval(this.autoSaveTimer);
