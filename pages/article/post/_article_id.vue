@@ -265,7 +265,6 @@ export default {
     async postArticle() {
       let _ts = this;
       _ts.doLoading = true;
-      let id = _ts.$route.params.article_id;
       let articleContent = _ts.contentEditor.getValue();
       let articleContentHtml = await _ts.contentEditor.getHTML();
       if (!(_ts.articleTitle && articleContent)) {
@@ -281,7 +280,7 @@ export default {
         articleTags: _ts.articleTags.join(","),
         articleStatus: 0
       };
-      let result = await _ts.$axios[id ? '$put' : '$post']('/api/article/post', article)
+      let result = await _ts.$axios.$post('/api/article/post', article)
       localStorage.removeItem('article-title');
       localStorage.removeItem('article-tags');
       _ts.contentEditor.setValue('');
@@ -294,7 +293,6 @@ export default {
       if (!autoSave) {
         _ts.doLoading = true;
       }
-      let id = _ts.$route.params.article_id;
       let articleContent = _ts.contentEditor.getValue();
       let articleContentHtml = await _ts.contentEditor.getHTML();
       if (!(_ts.articleTitle && articleContent)) {
@@ -310,8 +308,9 @@ export default {
         articleTags: _ts.articleTags.join(","),
         articleStatus: 1
       };
-      let result = await _ts.$axios[id ? '$put' : '$post']('/api/article/post', article)
+      let result = await _ts.$axios.$put('/api/article/post', article)
       if (autoSave) {
+        _ts.idArticle = result
         return
       }
       localStorage.removeItem('article-title');
